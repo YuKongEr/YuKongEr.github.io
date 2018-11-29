@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>【SpringBoot2.0系列04】SpringBoot之使用JPA完成简单的restapi | yukong&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="在前面我们已经知道在springboot中如何使用freemark与thymeleaf之类的视图模板引擎去渲染我们的视图页面，但是没涉及跟数据库交互的东西，所以今天在这里我们将介绍了一下如何在springboot中通过spring data jpa操作mysql数据库，并且构建一套简单的rest api接口。">
+<meta name="keywords" content="SpringBoot,SpringDataJpa,Rest">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【SpringBoot2.0系列04】SpringBoot之使用JPA完成简单的restapi">
+<meta property="og:url" content="http://www.yukonga.cn/2018/08/17/【SpringBoot2-0系列04】SpringBoot之使用JPA完成简单的restapi/index.html">
+<meta property="og:site_name" content="yukong&#39;s blog">
+<meta property="og:description" content="在前面我们已经知道在springboot中如何使用freemark与thymeleaf之类的视图模板引擎去渲染我们的视图页面，但是没涉及跟数据库交互的东西，所以今天在这里我们将介绍了一下如何在springboot中通过spring data jpa操作mysql数据库，并且构建一套简单的rest api接口。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-722476082a4ab89f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-4668bb4e12afbdd8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-b07f8706d9b082d9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-8f6f51c83301ae86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-90917244173e9927.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-e1bc7ae17a1830b0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-4487994d5bab19f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-ccb86fab94c7582a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-5c41e9025ec10aa4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-9e610eae5f69ee6e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-57914782a7aed98b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-8b657e817c2c6831.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-37a37a25f1f8fe05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-11-20T06:55:47.281Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【SpringBoot2.0系列04】SpringBoot之使用JPA完成简单的restapi">
+<meta name="twitter:description" content="在前面我们已经知道在springboot中如何使用freemark与thymeleaf之类的视图模板引擎去渲染我们的视图页面，但是没涉及跟数据库交互的东西，所以今天在这里我们将介绍了一下如何在springboot中通过spring data jpa操作mysql数据库，并且构建一套简单的rest api接口。">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/5338436-722476082a4ab89f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+
+    
+        <link rel="alternate" href="/" title="yukong&#39;s blog" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-124341418-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?45b7a3cfe46b3fa2c5d46f59f590664e";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+
+    <meta name="baidu-site-verification" content="pJ5mmU7D63">
+    <meta name="google-site-verification" content="ZPh7e9BTEyPhGs-x_f8BiHFTmP8d07W56zCeOeKuTnI">
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">yukong&#39;s blog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">主页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" style="border-radius: 50%;" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">主页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" style="border-radius: 50%;" src="/css/images/avatar.png">
+            <h2 id="name">yukong</h2>
+            <h3 id="title">Java Developer &amp; JavaScript Designer</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>Hangzhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/YuKongEr">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                19
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                31
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/YuKongEr" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-【SpringBoot2-0系列04】SpringBoot之使用JPA完成简单的restapi" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            【SpringBoot2.0系列04】SpringBoot之使用JPA完成简单的restapi
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/08/17/【SpringBoot2-0系列04】SpringBoot之使用JPA完成简单的restapi/">
+            <time datetime="2018-08-17T03:59:28.000Z" itemprop="datePublished">2018-08-17</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/SpringBoot/">SpringBoot</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/Rest/">Rest</a>, <a class="tag-link" href="/tags/SpringBoot/">SpringBoot</a>, <a class="tag-link" href="/tags/SpringDataJpa/">SpringDataJpa</a>
+    </div>
+
+                        
+                        阅读数量:&nbsp;&nbsp;<span id="/2018/08/17/【SpringBoot2-0系列04】SpringBoot之使用JPA完成简单的restapi/" class="leancloud_visitors" data-flag-title="【SpringBoot2.0系列04】SpringBoot之使用JPA完成简单的restapi" style="color:#009688;font-weight: bold"></span>&nbsp;&nbsp;次
+                        
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>在前面我们已经知道在springboot中如何使用<code>freemark</code>与<code>thymeleaf</code>之类的视图模板引擎去渲染我们的视图页面，但是没涉及跟数据库交互的东西，所以今天在这里我们将介绍了一下如何在<code>springboot</code>中通过<code>spring data jpa</code>操作<code>mysql</code>数据库，并且构建一套简单的<code>rest api</code>接口。</p>
+<a id="more"></a>
+<h1 id="一-前言"><a class="markdownIt-Anchor" href="#一-前言"></a> 一、前言</h1>
+<h2 id="11-spring-data-jpa-介绍"><a class="markdownIt-Anchor" href="#11-spring-data-jpa-介绍"></a> 1.1、Spring Data Jpa 介绍</h2>
+<p>Spring Data JPA是Spring基于Hibernate开发的一个JPA框架。如果用过Hibernate或者MyBatis的话，就会知道对象关系映射（ORM）框架有多么方便。但是Spring Data JPA框架功能更进一步，为我们做了 一个数据持久层框架几乎能做的任何事情。并且提供了基础的增删改查方法，具体api请看<a href="https://docs.spring.io/spring-data/data-jpa/docs/current/reference/html/" target="_blank" rel="noopener">官网</a>。</p>
+<h2 id="22"><a class="markdownIt-Anchor" href="#22"></a> 2.2</h2>
+<p>REST是所有Web应用都应该遵守的架构设计指导原则。<br>
+Representational State Transfer，翻译是”表现层状态转化”。<br>
+面向资源是REST最明显的特征，对于同一个资源的一组不同的操作。资源是服务器上一个可命名的抽象概念，资源是以名词为核心来组织的，首先关注的是名词。REST要求，必须通过统一的接口来对资源执行各种操作。对于每个资源只能执行一组有限的操作。（7个HTTP方法：GET/POST/PUT/DELETE/PATCH/HEAD/OPTIONS）<br>
+关于<code>rest api</code>如何涉及我也是从<a href="http://www.ruanyifeng.com/blog/2014/05/restful_api.html" target="_blank" rel="noopener">阮一峰</a>老师那里学习的。</p>
+<h1 id="二-目标"><a class="markdownIt-Anchor" href="#二-目标"></a> 二、目标</h1>
+<p>首先我们有一个<code>user</code>表，我们希望能通过构建出对应的<code>rest api</code>对表中的数据完成增删改查操作。<br>
+jpa的依赖如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;mysql&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;mysql-connector-java&lt;/artifactId&gt;</span><br><span class="line">        &lt;scope&gt;runtime&lt;/scope&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</span><br><span class="line">        &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">    &lt;dependency&gt;</span><br><span class="line">        &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">        &lt;artifactId&gt;spring-boot-starter-data-jpa&lt;/artifactId&gt;</span><br><span class="line">    &lt;/dependency&gt;</span><br><span class="line">&lt;/dependencies&gt;</span><br></pre></td></tr></table></figure>
+<p>接下来那么第一步就是创表了<br>
+1、创表<br>
+由于我们使用的spring data  jpa 而jpa的底层实现是hibernate，用过hibernate的同学知道 hibernate可以通过实体类逆向创建表，只需要配置一下<code>ddl-auto</code> 就可以<br>
+所以我们需要在<code>application.yml</code>配置一下</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">8989</span></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">  datasource:</span></span><br><span class="line"><span class="attr">    username:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    password:</span> <span class="string">root</span></span><br><span class="line"><span class="attr">    url:</span> <span class="attr">jdbc:mysql://127.0.0.1:3306/test?useUnicode=true&amp;characterEncoding=utf8</span></span><br><span class="line"><span class="attr">    driver-class-name:</span> <span class="string">com.mysql.jdbc.Driver</span></span><br><span class="line"><span class="attr">  jpa:</span></span><br><span class="line"><span class="attr">    hibernate:</span></span><br><span class="line"><span class="attr">      ddl-auto:</span> <span class="string">update</span></span><br><span class="line"><span class="attr">    show-sql:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+<p>在上面的配置文件中 我们配置了一个数据源跟tomcat端口还有jpa的配置。其中 <code>show-sql: true</code> 代表会在日志中打印我们操作的sql、<br>
+而另外 <code>ddl-auto</code>有四个值可选，分别是</p>
+<ul>
+<li><code>create</code> 启动时删数据库中的表，然后创建，退出时不删除数据表</li>
+<li><code>create-drop</code> 启动时删数据库中的表，然后创建，退出时删除数据表 如果表不存在报错</li>
+<li><code>update</code> 最常用的属性，第一次加载hibernate时根据model类会自动建立起表的结构（前提是先建立好数据库），以后加载hibernate时根据 model类自动更新表结构，即使表结构改变了但表中的行仍然存在不会删除以前的行。要注意的是当部署到服务器后，表结构是不会被马上建立起来的，是要等 应用第一次运行起来后才会。</li>
+<li><code>validate</code> 项目启动表结构进行校验 如果不一致则报错</li>
+</ul>
+<hr>
+<p>所以这里我们希望当表创建成功后  下次启动数据还在我们就选择了<code>update</code>模式，其次我们需要在本地的<code>mysql</code>数据库新建一个<code>test</code>数据库。<br>
+接下来我们需要编写的我们实体类<code>User.java</code>了 <code>hibernate</code>将会通过实体类的结构在<code>test</code>数据库中创建一个对应的<code>user</code>表<br>
+新建包<code>entity</code> 创建<code>User.java</code>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@JsonIgnoreProperties</span>(value=&#123;<span class="string">"hibernateLazyInitializer"</span>,<span class="string">"handler"</span>,<span class="string">"fieldHandler"</span>&#125;) </span><br><span class="line"><span class="meta">@Entity</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">User</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="meta">@GeneratedValue</span></span><br><span class="line">    <span class="keyword">private</span> Long id;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 用户名</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Column</span>(name = <span class="string">"username"</span>, nullable = <span class="keyword">true</span>, length = <span class="number">32</span>)</span><br><span class="line">    <span class="keyword">private</span> String username;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 密码</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Column</span>(name = <span class="string">"password"</span>, nullable = <span class="keyword">true</span>, length = <span class="number">32</span>)</span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 年龄</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Column</span>(name = <span class="string">"age"</span>, nullable = <span class="keyword">true</span>, length = <span class="number">11</span>)</span><br><span class="line">    <span class="keyword">private</span> Integer age;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 性别 1=男 2=女 其他=保密</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Column</span>(name = <span class="string">"sex"</span>, nullable = <span class="keyword">true</span>, length = <span class="number">11</span>)</span><br><span class="line">    <span class="keyword">private</span> Integer sex;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getUsername</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setUsername</span><span class="params">(String username)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.username = username;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getPassword</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> password;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setPassword</span><span class="params">(String password)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.password = password;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getAge</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setAge</span><span class="params">(Integer age)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.age = age;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Integer <span class="title">getSex</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> sex;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setSex</span><span class="params">(Integer sex)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.sex = sex;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> Long <span class="title">getId</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> id;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setId</span><span class="params">(Long id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.id = id;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>至此，我们的user表也算是创建好了，当我们的程序第一个启动的时候<code>jpa</code>会自动在<code>test</code>数据库中创建与之对应的表。</p>
+<hr>
+<p>2、构建rest api<br>
+这里我们需要构建如下的rest api</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:center">url</th>
+<th style="text-align:left">method</th>
+<th style="text-align:right">介绍</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center"><code>/user/</code></td>
+<td style="text-align:left"><code>get</code></td>
+<td style="text-align:right">获取所有的用户信息</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>/user/id/{id}</code></td>
+<td style="text-align:left"><code>get</code></td>
+<td style="text-align:right">根据id获取用户信息</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>/user/username/{username}</code></td>
+<td style="text-align:left"><code>get</code></td>
+<td style="text-align:right">根据username获取用户信息</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>/user</code></td>
+<td style="text-align:left"><code>post</code></td>
+<td style="text-align:right">新增用户信息</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>/user</code></td>
+<td style="text-align:left"><code>put</code></td>
+<td style="text-align:right">更新用户信息</td>
+</tr>
+<tr>
+<td style="text-align:center"><code>/user/id/{id}</code></td>
+<td style="text-align:left"><code>delete</code></td>
+<td style="text-align:right">根据id删除用户信息</td>
+</tr>
+</tbody>
+</table>
+<p>那么这就是我们需要构建的<code>rest api</code>，那么对应的由<code>mvc</code>模式可知我们的<code>rest api</code>是<code>controller</code>层的，所以我们的<code>service</code>跟<code>repository</code>层(备注在使用 jpa的时候我们喜欢把dao层命名为repository)需要提供对应的接口。<br>
+首先我们首先需要编写<code>UserRepository</code>接口，并且让它基础<code>JpaRepository</code>接口</p>
+<p>新建包<code>repository</code> 创建<code>UserRepository.java</code>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserRepository</span> <span class="keyword">extends</span> <span class="title">JpaRepository</span>&lt;<span class="title">User</span>, <span class="title">Long</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据用户名查找用户信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> username</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">User <span class="title">findUserByUsername</span><span class="params">(String username)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>解释一下上面的代码，为什么只有一个方法，而前面我们是五个接口，因为是在JpaRepository中提供较为基础的增删改查方法，我们无需编写就看使用。如果大家不信按住<code>ctrl</code>点击JpaRepository看源码就知道了。<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-722476082a4ab89f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>
+从上面就可以看出JpaRespository提供了哪些基础方法了。怎么样 是不是觉得很方便。那么接下来的第二点就Jpa可以根据你的命名规则来推断你这个方法作用，简单的来说<code>findUserByUsername</code> 根据这个方法名，jpa可以知道这个方法是通过用户名去查找用户。 具体的规则大家可以看<a href="https://docs.spring.io/spring-data/data-jpa/docs/current/reference/html/#jpa.query-methods" target="_blank" rel="noopener">文档</a><br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-4668bb4e12afbdd8.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>
+如果大家用的idea的话，那么它会用智能提示功能，如图<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-b07f8706d9b082d9.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>
+所以我们只需要编写方法名就可以轻轻松松的实现我们的查询方法，怎么样jpa是不是特别简单，但是需要注意的是方法名一定要命名规范，不要嫌太长了。<br>
+接下来就是编写我们的service层了，<br>
+新建<code>service</code>包创建<code>UserService.java</code>代码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 添加用户信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> user</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">User <span class="title">saveUser</span><span class="params">(User user)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 更新用户信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> user</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">User <span class="title">updateUser</span><span class="params">(User user)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据id获取用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> id</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">User <span class="title">getById</span><span class="params">(Long id)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据名称获取用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> username</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">User <span class="title">getByUserName</span><span class="params">(String username)</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 查询所有用户</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">List&lt;User&gt; <span class="title">queryAll</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据id删除用户信息</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> id</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">deleteById</span><span class="params">(Long id)</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>接下里就下service的实现类，带service包下新建<code>impl</code>包并且创建实现类<code>UserServiceImpl.java</code> 代码如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserRepository userRepository;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">saveUser</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userRepository.save(user);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">updateUser</span><span class="params">(User user)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userRepository.save(user);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getById</span><span class="params">(Long id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userRepository.getOne(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">getByUserName</span><span class="params">(String username)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userRepository.findUserByUsername(username);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">queryAll</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userRepository.findAll();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">deleteById</span><span class="params">(Long id)</span> </span>&#123;</span><br><span class="line">        userRepository.deleteById(id);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>那么紧接着就是控制层的代码了,新建<code>controller</code>包，并且创建<code>UserController.java</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(value = <span class="string">"/user"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> UserService userService;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PostMapping</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">save</span><span class="params">(@RequestBody User user)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userService.saveUser(user);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@PutMapping</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">update</span><span class="params">(@RequestBody User user)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userService.saveUser(user);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@DeleteMapping</span>(value = <span class="string">"/id/&#123;id&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">delete</span><span class="params">(@PathVariable  Long id)</span> </span>&#123;</span><br><span class="line">        userService.deleteById(id);</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"删除成功"</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(value = <span class="string">"/id/&#123;id&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findById</span> <span class="params">(@PathVariable Long id)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userService.getById(id);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(value = <span class="string">"/username/&#123;username&#125;"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> User <span class="title">findByUsername</span> <span class="params">(@PathVariable String username)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userService.getByUserName(username);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span>(value = <span class="string">"/"</span>)</span><br><span class="line">    <span class="function"><span class="keyword">public</span> List&lt;User&gt; <span class="title">findAll</span> <span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> userService.queryAll();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样我们就完成了一个简单的<code>rest api</code>了啊。<br>
+接下来我们来测试一下把。<br>
+3、测试<br>
+由于我们这里测试的是rest api普通的浏览器是没法支持 <code>post delet put</code>方式的访问的，所以这里我们就用<code>postman</code>来测试。<br>
+1、首先我们看到test数据库中现在是一张表都没有的<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-8f6f51c83301ae86.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>
+启动程序，注意观察日志。<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-90917244173e9927.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
+<p>我们看到了日志打印了创建表的<code>ddl</code>那么我们再看看数据库中有没有表<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-e1bc7ae17a1830b0.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>
+此时我们看到了有两张表，一张是我们user表，而另一张就是主键生成序列表。<br>
+接下来就开始我们的<code>rest api</code>测试了。<br>
+首先测试新增用户<br>
+打开postman</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5338436-4487994d5bab19f3.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>
+选择post模式，输入访问的url，然后选择body中的raw，因为我们使用的@RequestBody注解，所以我们选择raw中的Json，如图<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-ccb86fab94c7582a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>
+因为我们的id是自增的，所以我们不要输入，直接点击send访问，如果返回的数据有id那么就是代表新增成功。如下图就是新增成功。<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-5c41e9025ec10aa4.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>
+打开数据库中的user表，看看数据有没有保存成功。<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-9e610eae5f69ee6e.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>
+由图可知，保存成功。<br>
+接下来我们就多添加几条数据。<br>
+那么我们测试一下查询所有数据的方法。操作如图<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-57914782a7aed98b.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>
+我们刚刚一共添加三条数据，全部都查询出来了。<br>
+我们继续测试一下修改方法把。我们把id为2的数据密码修改为跟用户名一样，具体操作如图，<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-8b657e817c2c6831.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>
+点击send操作成功，我们用根据id查询的方法来查询一下刚刚id为2的数据有没有修改成功，那么我们查询一下id为2的数据，操作如图。<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-37a37a25f1f8fe05.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>
+由图中可以看到我们的修改是成功的，用户名跟密码已经一样的，那么代表我们的根据id查询方法也是没问题的。那么另外几个方法我们不测试了，留给大家测试。</p>
+<h1 id="三-总结"><a class="markdownIt-Anchor" href="#三-总结"></a> 三、总结</h1>
+<p>这里我们通过这次选择对于jpa的使用有了一个初步的了解，并且对于rest api的规范也有了个了解。</p>
+<p>最后配套教程的代码全部在这里<br>
+<a href="https://github.com/YuKongEr/SpringBoot-Study" target="_blank" rel="noopener">github https://github.com/YuKongEr/SpringBoot-Study</a>。麻烦点个star或者fork吧。</p>
+
+        
+        </div>
+        <footer class="article-footer">
+            
+            
+		        <!-- 添加捐赠图标 -->
+<div class="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+
+		   如果您觉得文章不错,可以请我喝一杯咖啡！
+        </span>
+        <br>
+      </div>  
+	<div id="donate_guide" class="donate_bar center hidden">
+		<!-- 支付宝打赏图案 -->
+		<img src="/img/zhifubao.jpg" alt="支付宝打赏"> 
+		<!-- 微信打赏图案 -->
+		<img src="/img/weixin.jpg" alt="微信打赏">  
+    </div>
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			if($('#donate_guide').hasClass('hidden')){
+				$('#donate_guide').removeClass('hidden');
+			}else{
+				$('#donate_guide').addClass('hidden');
+			}
+		}
+	</script>
+</div>
+<!-- 添加捐赠图标 -->
+	        
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+        <a href="http://www.yukonga.cn/2018/08/17/【SpringBoot2-0系列04】SpringBoot之使用JPA完成简单的restapi/#comments" class="article-comment-link">评论</a>
+    
+
+        </footer>
+    </div>
+   
+   <div>
+                <ul class="post-copyright">
+                <li class="post-copyright-author">
+                <strong>博客地址：</strong>http://www.yukonga.cn
+                </li>
+                <li class="post-copyright-author">
+                <strong>本文作者：</strong>yukong
+                </li>
+                <li class="post-copyright-link">
+                <strong>本文标题：</strong>
+                <a href="" title="{{ post.title }}">【SpringBoot2.0系列04】SpringBoot之使用JPA完成简单的restapi</a>
+                </li>
+                <li class="post-copyright-link">
+                <strong>发布时间：</strong>
+                <a href="" title="{{ page.title }}">2018年8月17日 - 11时08分</a>
+                </li>
+                <li class="post-copyright-license">
+                <strong>版权声明： </strong>
+                本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！
+                </li>
+                </ul>
+            <div>
+    
+<nav id="article-nav">
+    
+        <a href="/2018/08/18/【SpringBoot2-0系列05】SpringBoot之整合Mybatis/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    【SpringBoot2.0系列05】SpringBoot之整合Mybatis
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/08/16/【SpringBoot2-0系列03】SpringBoot之使用freemark视图模板/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">【SpringBoot2.0系列03】SpringBoot之使用freemark视图模板</div>
+        </a>
+    
+</nav>
+
+
+    
+</div></div></article>
+
+
+    
+    
+        <section id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC8zOTA5MS8xNTYxOA=="></div>
+</section>
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringCloud/">SpringCloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java并发编程实战/">java并发编程实战</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java网络编程/">java网络编程</a><span class="category-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AIO/">AIO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AQS/">AQS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BIO/">BIO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS/">CAS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataSource/">DataSource</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DynamicDataSource/">DynamicDataSource</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElementUI/">ElementUI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMark/">FreeMark</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lettuce/">Lettuce</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/">Mybatis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NIO/">NIO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/">Redis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rest/">Rest</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socket/">Socket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/">SpringBoot</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCache/">SpringCache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCloud/">SpringCloud</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringDataJpa/">SpringDataJpa</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thymeleaf/">Thymeleaf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/atomic/">atomic</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/synchronized/">synchronized</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/volatile/">volatile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发编程/">并发编程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/独占锁/">独占锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/线程通信/">线程通信</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/AIO/" style="font-size: 10px;">AIO</a> <a href="/tags/AQS/" style="font-size: 10px;">AQS</a> <a href="/tags/BIO/" style="font-size: 10px;">BIO</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/DataSource/" style="font-size: 10px;">DataSource</a> <a href="/tags/DynamicDataSource/" style="font-size: 10px;">DynamicDataSource</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/ElementUI/" style="font-size: 10px;">ElementUI</a> <a href="/tags/FreeMark/" style="font-size: 10px;">FreeMark</a> <a href="/tags/Lettuce/" style="font-size: 10px;">Lettuce</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/NIO/" style="font-size: 10px;">NIO</a> <a href="/tags/RabbitMQ/" style="font-size: 10px;">RabbitMQ</a> <a href="/tags/Redis/" style="font-size: 13.33px;">Redis</a> <a href="/tags/Rest/" style="font-size: 10px;">Rest</a> <a href="/tags/Scheduled/" style="font-size: 10px;">Scheduled</a> <a href="/tags/Socket/" style="font-size: 10px;">Socket</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/SpringCache/" style="font-size: 10px;">SpringCache</a> <a href="/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/tags/SpringDataJpa/" style="font-size: 10px;">SpringDataJpa</a> <a href="/tags/Thymeleaf/" style="font-size: 10px;">Thymeleaf</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/atomic/" style="font-size: 10px;">atomic</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/多线程/" style="font-size: 16.67px;">多线程</a> <a href="/tags/并发编程/" style="font-size: 10px;">并发编程</a> <a href="/tags/独占锁/" style="font-size: 10px;">独占锁</a> <a href="/tags/线程通信/" style="font-size: 10px;">线程通信</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://www.jianshu.com/u/bc2e35b66293">简书</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 yukong<br>
+           Analyse with <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274502153'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1274502153%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+        </div>
+        <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+        <p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+<script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("08/10/2018 12:49:00");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+setInterval("createtime()",250);
+</script>
+
+    </div>
+</footer>
+
+<script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.10.0/dist/av-live-query-min.js"></script>
+<script>
+    var APP_ID = '9XgwSNw7ObTAigmAlXx7liAk-gzGzoHsz';
+    var APP_KEY = 'lGLKIk08g1WODUSzrgE3mXns';
+    AV.init('9XgwSNw7ObTAigmAlXx7liAk-gzGzoHsz','lGLKIk08g1WODUSzrgE3mXns');
+    // 显示次数
+    function showTime(Counter) {
+        var query = new AV.Query("Counter");
+        if($(".leancloud_visitors").length > 0){
+            var url = $(".leancloud_visitors").attr('id').trim();
+            // where field
+            query.equalTo("words", url);
+            // count
+            query.count().then(function (number) {
+                // There are number instances of MyClass where words equals url.
+                $(document.getElementById(url)).text(number?  number : '--');
+            }, function (error) {
+                // error is an instance of AVError.
+            });
+        }
+    }
+    // 追加pv
+    function addCount(Counter) {
+        var url = $(".leancloud_visitors").length > 0 ? $(".leancloud_visitors").attr('id').trim() : 'icafebolger.com';
+        var Counter = AV.Object.extend("Counter");
+        var query = new Counter;
+        query.save({
+            words: url
+        }).then(function (object) {
+        })
+    }
+    $(function () {
+        var Counter = AV.Object.extend("Counter");
+        addCount(Counter);
+        showTime(Counter);
+    });
+</script>
+        
+    
+    
+    <!-- 来必力City版安装代码 -->
+    <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+
+         if (typeof LivereTower === 'function') { return; }
+
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+    </script>
+  <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+  <!-- City版安装代码已完成 -->
+
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

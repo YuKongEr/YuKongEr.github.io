@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>【java并发编程实战3】解密volatile | yukong&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="自从jdk1.5以后，volatile可谓发生了翻天覆地的变化，从一个一直被吐槽的关键词，变成一个轻量级的线程通信代名词。">
+<meta name="keywords" content="java,多线程,volatile">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【java并发编程实战3】解密volatile">
+<meta property="og:url" content="http://www.yukonga.cn/2018/09/03/【java并发编程实战3】解密volatile/index.html">
+<meta property="og:site_name" content="yukong&#39;s blog">
+<meta property="og:description" content="自从jdk1.5以后，volatile可谓发生了翻天覆地的变化，从一个一直被吐槽的关键词，变成一个轻量级的线程通信代名词。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-25e0f588bd579e07.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-b533cdf78c24ab64.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-ddb4dd1530787751.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-11-20T06:55:47.286Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【java并发编程实战3】解密volatile">
+<meta name="twitter:description" content="自从jdk1.5以后，volatile可谓发生了翻天覆地的变化，从一个一直被吐槽的关键词，变成一个轻量级的线程通信代名词。">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/5338436-25e0f588bd579e07.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+
+    
+        <link rel="alternate" href="/" title="yukong&#39;s blog" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-124341418-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?45b7a3cfe46b3fa2c5d46f59f590664e";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+
+    <meta name="baidu-site-verification" content="pJ5mmU7D63">
+    <meta name="google-site-verification" content="ZPh7e9BTEyPhGs-x_f8BiHFTmP8d07W56zCeOeKuTnI">
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">yukong&#39;s blog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">主页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" style="border-radius: 50%;" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">主页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" style="border-radius: 50%;" src="/css/images/avatar.png">
+            <h2 id="name">yukong</h2>
+            <h3 id="title">Java Developer &amp; JavaScript Designer</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>Hangzhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/YuKongEr">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                19
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                31
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/YuKongEr" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-【java并发编程实战3】解密volatile" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            【java并发编程实战3】解密volatile
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/09/03/【java并发编程实战3】解密volatile/">
+            <time datetime="2018-09-03T11:19:22.000Z" itemprop="datePublished">2018-09-03</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/java并发编程实战/">java并发编程实战</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/java/">java</a>, <a class="tag-link" href="/tags/volatile/">volatile</a>, <a class="tag-link" href="/tags/多线程/">多线程</a>
+    </div>
+
+                        
+                        阅读数量:&nbsp;&nbsp;<span id="/2018/09/03/【java并发编程实战3】解密volatile/" class="leancloud_visitors" data-flag-title="【java并发编程实战3】解密volatile" style="color:#009688;font-weight: bold"></span>&nbsp;&nbsp;次
+                        
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>自从jdk1.5以后，<code>volatile</code>可谓发生了翻天覆地的变化，从一个一直被吐槽的关键词，变成一个轻量级的线程通信代名词。</p>
+<a id="more"></a>
+<p>接下来我们将从以下几个方面来分析以下<code>volatile</code>。</p>
+<ul>
+<li>
+<p>重排序与<code>as if serial</code>的关系</p>
+</li>
+<li>
+<p><code>volatile</code>的特点</p>
+</li>
+<li>
+<p><code>volatile</code>的内存语义</p>
+</li>
+<li>
+<p><code>volatile</code>的使用场景</p>
+</li>
+</ul>
+<h2 id="重排序与as-if-serial的关系"><a class="markdownIt-Anchor" href="#重排序与as-if-serial的关系"></a> 重排序与as if serial的关系</h2>
+<p>重排序值得是编译器与处理器为了优化程序的性能，而对指令序列进行重新排序的。</p>
+<p>但是并不是什么情况下都可以重排序的，</p>
+<ul>
+<li>
+<p>数据依赖</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">1</span>;			<span class="comment">// 1</span></span><br><span class="line">b = <span class="number">2</span>;			<span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<p>在这种情况，1、2不存在数据依赖，是可以重排序的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="number">1</span>;			<span class="comment">// 1</span></span><br><span class="line">b = a;			<span class="comment">// 2</span></span><br></pre></td></tr></table></figure>
+<p>在这种情况，1、2存在数据依赖，是禁止重排序的。</p>
+</li>
+<li>
+<p><code>as if serial</code></p>
+<p>简单的理解就是。不管怎么重排序，在单线程情况下程序的执行结果是一致。</p>
+</li>
+</ul>
+<p>根据 <code>as if serial</code>原则，它强调了单线程。那么多线程发生重排序又是怎么样的呢？</p>
+<p>请看下面代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolatileExample1</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 共享变量 name</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String name = <span class="string">"init"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 共享变量 flag</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span>  <span class="keyword">static</span> <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Thread threadA = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            name = <span class="string">"yukong"</span>;			<span class="comment">// 1</span></span><br><span class="line">            flag = <span class="keyword">true</span>;				<span class="comment">// 2</span></span><br><span class="line">        &#125;);</span><br><span class="line">        Thread threadB = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (flag) &#123;   				<span class="comment">// 3</span></span><br><span class="line">                System.out.println(<span class="string">"flag = "</span> + flag + <span class="string">" name = "</span> +name);  <span class="comment">// 4</span></span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码中，name输出一定是<code>yukong</code>吗，答案是不一定，根据<code>happen-before</code>原则与<code>as if serial</code></p>
+<p>原则，由于 1、2不存在依赖关系，可以重排序，操作3、操作4也不存在数据依赖，也可以重排序。</p>
+<p>那么就有可能发生下面的情况</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5338436-25e0f588bd579e07.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1535967197003.png"></p>
+<p>上图中，操作1与操作2发生了重排序，程序运行的时候，线程A先将flag更改成true，然后线程B读取flag变量并且判断，由于此时flag已经是true，线程B将继续读取name的值，由于此时线程name的值还没有被线程A写入，那么线程此时输出的name就是初始值，因为在多线程的情况下，重排序存在线程安全问题。</p>
+<h2 id="volatile的特点"><a class="markdownIt-Anchor" href="#volatile的特点"></a> volatile的特点</h2>
+<p><code>volatile</code>变量具有以下的特点。</p>
+<ul>
+<li>可见性。对于一个<code>volatile</code>变量的读，总是能看到任意线程对这个变量的最后的修改。</li>
+<li>有序性。对于存在指令重排序的情况，<code>volatile</code>会禁止部分指令重排序。</li>
+</ul>
+<p>这里我先介绍一下<code>volatile</code>关键词的特点，接下来我们将会从它的内存语义来解释，为什么它会具有以上的特点，以及它使用的场景。</p>
+<h2 id="volatile的内存语义"><a class="markdownIt-Anchor" href="#volatile的内存语义"></a> volatile的内存语义</h2>
+<ul>
+<li>当写一个<code>volatile</code>变量时，JMM会<strong>立即</strong>将本地变量中对应的共享变量值刷新到主内存中。</li>
+<li>当读一个<code>volatile</code>变量时，JMM会将线程本地变量存储的值，置为无效值，线程接下来将从主内存中读取共享变量。</li>
+</ul>
+<p>如果一个场景存在对<code>volatile</code>变量的读写场景，在读线程B读一个<code>volatile</code>变量后，，写线程A在写这个<code>volatile</code>变量前所有的所见的共享变量的值都将会立即变得对读线程B可见。</p>
+<p>那么这种内存语义是怎么实现的呢？</p>
+<p>其实编译器生产字节码的时候，会在指令序列中插入内存屏障来禁止指令排序。下面就是JMM内存屏障插入的策略。</p>
+<ul>
+<li>在每一个volatile写操作前插入一个StoreStore屏障</li>
+<li>在每一个volatile写操作后插入一个StoreLoad屏障</li>
+<li>在每一个volatile写操作后插入一个LoadLoad屏障</li>
+<li>在每一个volatile读操作后插入一个LoadStore屏障</li>
+</ul>
+<p>那么这些策略中，插入这些屏障有什么作用呢？我们逐条逐条分析一下。</p>
+<ul>
+<li>在每一个volatile写操作前插入一个StoreStore屏障，这条策略保证了volatile写变量与之前的普通变量写不会重排序，即是只有当volatile变量之前的普通变量写完，volatile变量才会写。 这样就保证volatile变量写不会跟它之前的普通变量写重排序</li>
+<li>在每一个volatile写操作后插入一个StoreLoad屏障，这条策略保证了volatile写变量与之后的volatile写/读不会重排序，即是只有当volatile变量写完之后，你后面的volatile读写才能操作。 这样就保证volatile变量写不会跟它之后的普通变量读重排序</li>
+<li>在每一个volatile读操作后插入一个LoadLoad屏障，这条策略保证了volatile读变量与之后的普通读不会重排序，即只有当前volatile变量读完，之后的普通读才能读。 这样就保证volatile变量读不会跟它之后的普通变量读重排序</li>
+<li>在每一个volatile读操作后插入一个LoadStore屏障，这条策略保证了volatile读变量与之后的普通写不会重排序，即只有当前volatile变量读完，之后的普通写才能写。样就保证volatile变量读不会跟它之后的普通变量写重排序</li>
+</ul>
+<p>根据这些策略，volatile变量禁止了部分的重排序，这样也是为什么我们会说volatile具有一定的有序的原因。</p>
+<p>根据以上分析的<code>volatile</code>的内存语义，大家也就知道了为什么前面我们提到的<code>happen-before</code>原则会有一条</p>
+<ul>
+<li>volatile的写happen-before与volaile的读。</li>
+</ul>
+<p>那么根据<code>volatile</code>的内存语义，我们只需要更改之前的部分代码，只能让它正确的执行。</p>
+<p>即把flag定义成一个<code>volatile</code>变量即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">VolatileExample1</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 共享变量 name</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> String name = <span class="string">"init"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 共享变量 flag</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span>  <span class="keyword">volatile</span> <span class="keyword">static</span> <span class="keyword">boolean</span> flag = <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        Thread threadA = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            name = <span class="string">"yukong"</span>;			<span class="comment">// 1</span></span><br><span class="line">            flag = <span class="keyword">true</span>;				<span class="comment">// 2</span></span><br><span class="line">        &#125;);</span><br><span class="line">        Thread threadB = <span class="keyword">new</span> Thread(() -&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> (flag) &#123;   				<span class="comment">// 3</span></span><br><span class="line">                System.out.println(<span class="string">"flag = "</span> + flag + <span class="string">" name = "</span> +name);  <span class="comment">// 4</span></span><br><span class="line">            &#125;;</span><br><span class="line">        &#125;);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们来分析一下</p>
+<ul>
+<li>
+<p>由于 flag是volatile变量 那么在volatile写之前插入一个storestore内存屏障，所以1,2不会发生重排序,即1happen before 2</p>
+</li>
+<li>
+<p>由于 flag是volatile变量 那么在volatile读之后插入一个loadload内存屏障，所以3,4不会发生重排序,即3happen before 4</p>
+</li>
+<li>
+<p>根据happen-before原则，volatile写happen before volatile读，即是 2happen before 3。</p>
+</li>
+<li>
+<p>根据happen-before的传递性，所以1 happen before4。</p>
+</li>
+</ul>
+<p><img src="https://upload-images.jianshu.io/upload_images/5338436-b533cdf78c24ab64.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1535969126569.png"></p>
+<h1 id="volatile的使用场景"><a class="markdownIt-Anchor" href="#volatile的使用场景"></a> volatile的使用场景</h1>
+<ul>
+<li>标记变量，也就是上面的flag使用</li>
+<li>double check 单例模式中</li>
+</ul>
+<p>下面我们看看double check的使用</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton instance = <span class="keyword">null</span>;</span><br><span class="line">     </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span><span class="params">()</span> </span>&#123;</span><br><span class="line">         </span><br><span class="line">    &#125;</span><br><span class="line">     </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span>(instance==<span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123;</span><br><span class="line">                <span class="keyword">if</span>(instance==<span class="keyword">null</span>)</span><br><span class="line">                    instance = <span class="keyword">new</span> Singleton();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> instance;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>至于为何需要这么写请参考：</p>
+<p>《Java 中的双重检查（Double-Check）》<a href="http://www.iteye.com/topic/652440" target="_blank" rel="noopener">http://www.iteye.com/topic/652440</a></p>
+<p>最后大家希望关注一下我的个人公众号。<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-ddb4dd1530787751.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="公众号"></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            
+            
+		        <!-- 添加捐赠图标 -->
+<div class="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+
+		   如果您觉得文章不错,可以请我喝一杯咖啡！
+        </span>
+        <br>
+      </div>  
+	<div id="donate_guide" class="donate_bar center hidden">
+		<!-- 支付宝打赏图案 -->
+		<img src="/img/zhifubao.jpg" alt="支付宝打赏"> 
+		<!-- 微信打赏图案 -->
+		<img src="/img/weixin.jpg" alt="微信打赏">  
+    </div>
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			if($('#donate_guide').hasClass('hidden')){
+				$('#donate_guide').removeClass('hidden');
+			}else{
+				$('#donate_guide').addClass('hidden');
+			}
+		}
+	</script>
+</div>
+<!-- 添加捐赠图标 -->
+	        
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+        <a href="http://www.yukonga.cn/2018/09/03/【java并发编程实战3】解密volatile/#comments" class="article-comment-link">评论</a>
+    
+
+        </footer>
+    </div>
+   
+   <div>
+                <ul class="post-copyright">
+                <li class="post-copyright-author">
+                <strong>博客地址：</strong>http://www.yukonga.cn
+                </li>
+                <li class="post-copyright-author">
+                <strong>本文作者：</strong>yukong
+                </li>
+                <li class="post-copyright-link">
+                <strong>本文标题：</strong>
+                <a href="" title="{{ post.title }}">【java并发编程实战3】解密volatile</a>
+                </li>
+                <li class="post-copyright-link">
+                <strong>发布时间：</strong>
+                <a href="" title="{{ page.title }}">2018年9月3日 - 19时09分</a>
+                </li>
+                <li class="post-copyright-license">
+                <strong>版权声明： </strong>
+                本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！
+                </li>
+                </ul>
+            <div>
+    
+<nav id="article-nav">
+    
+        <a href="/2018/09/04/【SpringBoot2-0系列11】SpringBoot之-Elasticsearch完成CURD/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    【SpringBoot2.0系列11】SpringBoot之@Elasticsearch完成CURD
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/08/30/【java并发编程实战2】无锁编程CAS与atomic包/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">【java并发编程实战2】无锁编程CAS与atomic包</div>
+        </a>
+    
+</nav>
+
+
+    
+</div></div></article>
+
+
+    
+    
+        <section id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC8zOTA5MS8xNTYxOA=="></div>
+</section>
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringCloud/">SpringCloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java并发编程实战/">java并发编程实战</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java网络编程/">java网络编程</a><span class="category-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AIO/">AIO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AQS/">AQS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BIO/">BIO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS/">CAS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataSource/">DataSource</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DynamicDataSource/">DynamicDataSource</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElementUI/">ElementUI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMark/">FreeMark</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lettuce/">Lettuce</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/">Mybatis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NIO/">NIO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/">Redis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rest/">Rest</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socket/">Socket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/">SpringBoot</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCache/">SpringCache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCloud/">SpringCloud</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringDataJpa/">SpringDataJpa</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thymeleaf/">Thymeleaf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/atomic/">atomic</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/synchronized/">synchronized</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/volatile/">volatile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发编程/">并发编程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/独占锁/">独占锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/线程通信/">线程通信</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/AIO/" style="font-size: 10px;">AIO</a> <a href="/tags/AQS/" style="font-size: 10px;">AQS</a> <a href="/tags/BIO/" style="font-size: 10px;">BIO</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/DataSource/" style="font-size: 10px;">DataSource</a> <a href="/tags/DynamicDataSource/" style="font-size: 10px;">DynamicDataSource</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/ElementUI/" style="font-size: 10px;">ElementUI</a> <a href="/tags/FreeMark/" style="font-size: 10px;">FreeMark</a> <a href="/tags/Lettuce/" style="font-size: 10px;">Lettuce</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/NIO/" style="font-size: 10px;">NIO</a> <a href="/tags/RabbitMQ/" style="font-size: 10px;">RabbitMQ</a> <a href="/tags/Redis/" style="font-size: 13.33px;">Redis</a> <a href="/tags/Rest/" style="font-size: 10px;">Rest</a> <a href="/tags/Scheduled/" style="font-size: 10px;">Scheduled</a> <a href="/tags/Socket/" style="font-size: 10px;">Socket</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/SpringCache/" style="font-size: 10px;">SpringCache</a> <a href="/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/tags/SpringDataJpa/" style="font-size: 10px;">SpringDataJpa</a> <a href="/tags/Thymeleaf/" style="font-size: 10px;">Thymeleaf</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/atomic/" style="font-size: 10px;">atomic</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/多线程/" style="font-size: 16.67px;">多线程</a> <a href="/tags/并发编程/" style="font-size: 10px;">并发编程</a> <a href="/tags/独占锁/" style="font-size: 10px;">独占锁</a> <a href="/tags/线程通信/" style="font-size: 10px;">线程通信</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://www.jianshu.com/u/bc2e35b66293">简书</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 yukong<br>
+           Analyse with <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274502153'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1274502153%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+        </div>
+        <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+        <p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+<script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("08/10/2018 12:49:00");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+setInterval("createtime()",250);
+</script>
+
+    </div>
+</footer>
+
+<script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.10.0/dist/av-live-query-min.js"></script>
+<script>
+    var APP_ID = '9XgwSNw7ObTAigmAlXx7liAk-gzGzoHsz';
+    var APP_KEY = 'lGLKIk08g1WODUSzrgE3mXns';
+    AV.init('9XgwSNw7ObTAigmAlXx7liAk-gzGzoHsz','lGLKIk08g1WODUSzrgE3mXns');
+    // 显示次数
+    function showTime(Counter) {
+        var query = new AV.Query("Counter");
+        if($(".leancloud_visitors").length > 0){
+            var url = $(".leancloud_visitors").attr('id').trim();
+            // where field
+            query.equalTo("words", url);
+            // count
+            query.count().then(function (number) {
+                // There are number instances of MyClass where words equals url.
+                $(document.getElementById(url)).text(number?  number : '--');
+            }, function (error) {
+                // error is an instance of AVError.
+            });
+        }
+    }
+    // 追加pv
+    function addCount(Counter) {
+        var url = $(".leancloud_visitors").length > 0 ? $(".leancloud_visitors").attr('id').trim() : 'icafebolger.com';
+        var Counter = AV.Object.extend("Counter");
+        var query = new Counter;
+        query.save({
+            words: url
+        }).then(function (object) {
+        })
+    }
+    $(function () {
+        var Counter = AV.Object.extend("Counter");
+        addCount(Counter);
+        showTime(Counter);
+    });
+</script>
+        
+    
+    
+    <!-- 来必力City版安装代码 -->
+    <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+
+         if (typeof LivereTower === 'function') { return; }
+
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+    </script>
+  <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+  <!-- City版安装代码已完成 -->
+
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>

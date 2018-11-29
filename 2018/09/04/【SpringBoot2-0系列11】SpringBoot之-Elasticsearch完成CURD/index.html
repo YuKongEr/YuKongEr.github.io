@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head><meta name="generator" content="Hexo 3.8.0">
+    <meta charset="utf-8">
+    
+    <title>【SpringBoot2.0系列11】SpringBoot之@Elasticsearch完成CURD | yukong&#39;s blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="description" content="ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。">
+<meta name="keywords" content="SpringBoot,ElasticSearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【SpringBoot2.0系列11】SpringBoot之@Elasticsearch完成CURD">
+<meta property="og:url" content="http://www.yukonga.cn/2018/09/04/【SpringBoot2-0系列11】SpringBoot之-Elasticsearch完成CURD/index.html">
+<meta property="og:site_name" content="yukong&#39;s blog">
+<meta property="og:description" content="ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-7cfb53c208dcaab7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-f6e5193ac482182a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-ddb4dd1530787751.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-11-20T06:55:47.285Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="【SpringBoot2.0系列11】SpringBoot之@Elasticsearch完成CURD">
+<meta name="twitter:description" content="ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/5338436-7cfb53c208dcaab7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+    
+
+    
+        <link rel="alternate" href="/" title="yukong&#39;s blog" type="application/atom+xml">
+    
+
+    
+
+    <link rel="stylesheet" href="/libs/font-awesome/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/libs/open-sans/styles.css">
+    <link rel="stylesheet" href="/libs/source-code-pro/styles.css">
+
+    <link rel="stylesheet" href="/css/style.css">
+
+    <script src="/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+    
+        <link rel="stylesheet" href="/libs/lightgallery/css/lightgallery.min.css">
+    
+    
+        <link rel="stylesheet" href="/libs/justified-gallery/justifiedGallery.min.css">
+    
+    
+        <script type="text/javascript">
+(function(i,s,o,g,r,a,m) {i['GoogleAnalyticsObject']=r;i[r]=i[r]||function() {
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-124341418-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+    
+    
+    
+        <script>
+var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "//hm.baidu.com/hm.js?45b7a3cfe46b3fa2c5d46f59f590664e";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script>
+
+    
+
+
+
+    <meta name="baidu-site-verification" content="pJ5mmU7D63">
+    <meta name="google-site-verification" content="ZPh7e9BTEyPhGs-x_f8BiHFTmP8d07W56zCeOeKuTnI">
+</head>
+</html>
+<body>
+    <div id="container">
+        <header id="header">
+    <div id="header-main" class="header-inner">
+        <div class="outer">
+            <a href="/" id="logo">
+                <i class="logo"></i>
+                <span class="site-title">yukong&#39;s blog</span>
+            </a>
+            <nav id="main-nav">
+                
+                    <a class="main-nav-link" href="/.">主页</a>
+                
+                    <a class="main-nav-link" href="/archives">归档</a>
+                
+                    <a class="main-nav-link" href="/categories">分类</a>
+                
+                    <a class="main-nav-link" href="/tags">标签</a>
+                
+                    <a class="main-nav-link" href="/about">关于</a>
+                
+            </nav>
+            
+                
+                <nav id="sub-nav">
+                    <div class="profile" id="profile-nav">
+                        <a id="profile-anchor" href="javascript:;">
+                            <img class="avatar" style="border-radius: 50%;" src="/css/images/avatar.png">
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                    </div>
+                </nav>
+            
+            <div id="search-form-wrap">
+
+    <form class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+        <button type="submit" class="search-form-submit"></button>
+    </form>
+    <div class="ins-search">
+    <div class="ins-search-mask"></div>
+    <div class="ins-search-container">
+        <div class="ins-input-wrapper">
+            <input type="text" class="ins-search-input" placeholder="想要查找什么...">
+            <span class="ins-close ins-selectable"><i class="fa fa-times-circle"></i></span>
+        </div>
+        <div class="ins-section-wrapper">
+            <div class="ins-section-container"></div>
+        </div>
+    </div>
+</div>
+<script>
+(function (window) {
+    var INSIGHT_CONFIG = {
+        TRANSLATION: {
+            POSTS: '文章',
+            PAGES: '页面',
+            CATEGORIES: '分类',
+            TAGS: '标签',
+            UNTITLED: '(未命名)',
+        },
+        ROOT_URL: '/',
+        CONTENT_URL: '/content.json',
+    };
+    window.INSIGHT_CONFIG = INSIGHT_CONFIG;
+})(window);
+</script>
+<script src="/js/insight.js"></script>
+
+</div>
+        </div>
+    </div>
+    <div id="main-nav-mobile" class="header-sub header-inner">
+        <table class="menu outer">
+            <tr>
+                
+                    <td><a class="main-nav-link" href="/.">主页</a></td>
+                
+                    <td><a class="main-nav-link" href="/archives">归档</a></td>
+                
+                    <td><a class="main-nav-link" href="/categories">分类</a></td>
+                
+                    <td><a class="main-nav-link" href="/tags">标签</a></td>
+                
+                    <td><a class="main-nav-link" href="/about">关于</a></td>
+                
+                <td>
+                    
+    <div class="search-form">
+        <input type="text" class="ins-search-input search-form-input" placeholder="搜索">
+    </div>
+
+                </td>
+            </tr>
+        </table>
+    </div>
+</header>
+
+        <div class="outer">
+            
+                
+
+<aside id="profile">
+    <div class="inner profile-inner">
+        <div class="base-info profile-block">
+            <img id="avatar" style="border-radius: 50%;" src="/css/images/avatar.png">
+            <h2 id="name">yukong</h2>
+            <h3 id="title">Java Developer &amp; JavaScript Designer</h3>
+            <span id="location"><i class="fa fa-map-marker"></i>Hangzhou, China</span>
+            <a id="follow" target="_blank" href="https://github.com/YuKongEr">关注我</a>
+        </div>
+        <div class="article-info profile-block">
+            <div class="article-info-block">
+                19
+                <span>文章</span>
+            </div>
+            <div class="article-info-block">
+                31
+                <span>标签</span>
+            </div>
+        </div>
+        
+        <div class="profile-block social-links">
+            <table>
+                <tr>
+                    
+                    
+                    <td>
+                        <a href="https://github.com/YuKongEr" target="_blank" title="github" class="tooltip">
+                            <i class="fa fa-github"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="twitter" class="tooltip">
+                            <i class="fa fa-twitter"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="facebook" class="tooltip">
+                            <i class="fa fa-facebook"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="dribbble" class="tooltip">
+                            <i class="fa fa-dribbble"></i>
+                        </a>
+                    </td>
+                    
+                    <td>
+                        <a href="/" target="_blank" title="rss" class="tooltip">
+                            <i class="fa fa-rss"></i>
+                        </a>
+                    </td>
+                    
+                </tr>
+            </table>
+        </div>
+        
+    </div>
+</aside>
+
+            
+            <section id="main"><article id="post-【SpringBoot2-0系列11】SpringBoot之-Elasticsearch完成CURD" class="article article-type-post" itemscope="" itemprop="blogPost">
+    <div class="article-inner">
+        
+        
+            <header class="article-header">
+                
+    
+        <h1 class="article-title" itemprop="name">
+            【SpringBoot2.0系列11】SpringBoot之@Elasticsearch完成CURD
+        </h1>
+    
+
+                
+                    <div class="article-meta">
+                        
+    <div class="article-date">
+        <i class="fa fa-calendar"></i>
+        <a href="/2018/09/04/【SpringBoot2-0系列11】SpringBoot之-Elasticsearch完成CURD/">
+            <time datetime="2018-09-04T10:37:47.000Z" itemprop="datePublished">2018-09-04</time>
+        </a>
+    </div>
+
+
+                        
+    <div class="article-category">
+    	<i class="fa fa-folder"></i>
+        <a class="article-category-link" href="/categories/SpringBoot/">SpringBoot</a>
+    </div>
+
+                        
+    <div class="article-tag">
+        <i class="fa fa-tag"></i>
+        <a class="tag-link" href="/tags/ElasticSearch/">ElasticSearch</a>, <a class="tag-link" href="/tags/SpringBoot/">SpringBoot</a>
+    </div>
+
+                        
+                        阅读数量:&nbsp;&nbsp;<span id="/2018/09/04/【SpringBoot2-0系列11】SpringBoot之-Elasticsearch完成CURD/" class="leancloud_visitors" data-flag-title="【SpringBoot2.0系列11】SpringBoot之@Elasticsearch完成CURD" style="color:#009688;font-weight: bold"></span>&nbsp;&nbsp;次
+                        
+                    </div>
+                
+            </header>
+        
+        
+        <div class="article-entry" itemprop="articleBody">
+        
+            
+            <p>ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于<a href="https://baike.baidu.com/item/%E4%BA%91%E8%AE%A1%E7%AE%97/9969353" target="_blank" rel="noopener">云计算</a>中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。</p>
+<a id="more"></a>
+<p>如果在springboot使用Easticsearch呢。在这里我们使用spring-boot-starter-data-elasticsearch。<br>
+它提供一系列简单的api给我们使用，让我们有种操作关系数据库的感觉。<br>
+好了话不多说，先说一下环境。</p>
+<ul>
+<li>spring boot2.x</li>
+<li>jdk8</li>
+<li>elasticsearch5.x(6.x也可以)</li>
+</ul>
+<h2 id="依赖"><a class="markdownIt-Anchor" href="#依赖"></a> 依赖</h2>
+<p>引入依赖</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="comment">&lt;!-- lombok --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.projectlombok<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>lombok<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.16.22<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">      <span class="comment">&lt;!-- elasticsearch --&gt;</span></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-data-elasticsearch<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"></span><br><span class="line">      <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-test<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">          <span class="tag">&lt;<span class="name">scope</span>&gt;</span>test<span class="tag">&lt;/<span class="name">scope</span>&gt;</span></span><br><span class="line">      <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p>在这里我们分别引入elasticsearch跟lombok的依赖，关于lombok的介绍大家可以看看<a href="https://blog.csdn.net/motui/article/details/79012846" target="_blank" rel="noopener">这篇文章</a> 讲的很详细。我这简单的介绍一下在项目中使用Lombok可以减少很多重复代码的书写。比如说getter/setter/toString等方法的编写。</p>
+<h2 id="配置es地址"><a class="markdownIt-Anchor" href="#配置es地址"></a> 配置es地址</h2>
+<p>在下文中我将用es代替elasticsearch。我们打开application.yml文件 配置如下</p>
+<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">spring:</span></span><br><span class="line"><span class="attr">data:</span></span><br><span class="line"><span class="attr">  elasticsearch:</span></span><br><span class="line">    <span class="comment"># 集群的名字</span></span><br><span class="line"><span class="attr">    cluster-name:</span> <span class="string">wali</span></span><br><span class="line">    <span class="comment"># 节点的ip与端口 注意端口是9300不是9200</span></span><br><span class="line"><span class="attr">    cluster-nodes:</span> <span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span><span class="string">:9300</span></span><br></pre></td></tr></table></figure>
+<h2 id="构建文档对象"><a class="markdownIt-Anchor" href="#构建文档对象"></a> 构建文档对象</h2>
+<p>假设这是一个商品索引goods，他有一个类型是电脑computer。<br>
+分别有四个字段</p>
+<ul>
+<li>id  唯一标识</li>
+<li>name 商品名称</li>
+<li>number 商品数量</li>
+<li>desc 商品具体描述<br>
+我们根据上面的描述，编写出对应的实体类</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="meta">@ToString</span></span><br><span class="line"><span class="meta">@Accessors</span>(chain = <span class="keyword">true</span>)</span><br><span class="line"><span class="meta">@Document</span>(indexName = <span class="string">"goods"</span>, type = <span class="string">"computer"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Good</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 主键,注意这个搜索是id类型是string，与我们常用的不同</span></span><br><span class="line"><span class="comment">     * Id注解加上后，在Elasticsearch里相应于该列就是主键了，在查询时就可以直接用主键查询</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="meta">@Id</span></span><br><span class="line">    <span class="keyword">private</span> String id;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> String desc;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> Integer number;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中<code>@Data @ToString @Accessors(chain = true)</code> 是属于lombok注解。</p>
+<ul>
+<li>@Data 会自动上传get/set方法</li>
+<li>@ToString 会生成tostring方法</li>
+<li>@Accessors(chain = true) 会让我们set方法可以链式调用<br>
+@Document注解</li>
+</ul>
+<p><code>@Document</code>注解里面的几个属性，类比mysql的话是这样：<br>
+indexName –&gt; 索引库的名称，建议以项目的名称命名，就相当于数据库DB<br>
+type –&gt; 类型，建议以实体的名称命名Table ，就相当于数据库中的表table<br>
+Document –&gt; row 就相当于某一个具体对象</p>
+<h2 id="jpa构建文档库"><a class="markdownIt-Anchor" href="#jpa构建文档库"></a> jpa构建文档库</h2>
+<p>接着，我们可以通过jpa构建文档库，来操作我们的goods对应的文档。<br>
+因为我们引入的是spring data的elasticsearch所以它遵循spring data的接口，也就是说操作elasticSearch与操作spring data jpa的方法是完全一样的，我们只将文档库继承ElasticsearchRepository即可。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">GoodRepository</span> <span class="keyword">extends</span> <span class="title">ElasticsearchRepository</span>&lt;<span class="title">Good</span>, <span class="title">String</span>&gt; </span>&#123;</span><br><span class="line"></span><br><span class="line">   <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 根据商品名称查询 分页</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> name</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@param</span> pageable</span></span><br><span class="line"><span class="comment">     * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function">Page&lt;Good&gt; <span class="title">findByName</span><span class="params">(String name, Pageable pageable)</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>然后创建对应的测试类。前面说过快捷键<code>ctrl+shift+t</code><br>
+并且编写测试方法，我们分别需要测试添加 删除 修改  查询 分页查询方法。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Component</span></span><br><span class="line"><span class="meta">@FixMethodOrder</span>(MethodSorters.NAME_ASCENDING)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">GoodRepositoryTest</span> <span class="keyword">extends</span> <span class="title">Chapter10ApplicationTests</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> GoodRepository goodRepository;</span><br><span class="line">    </span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">select</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span></span>&#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findByName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面代码我们是通过基础<code>主测试类</code>然后使用<code>@Component</code>注解就可以，这样就不需要每个测试都要<code>@SpringTest注解与@RunWith注解了</code><br>
+另外<code>@FixMethodOrder(MethodSorters.NAME_ASCENDING)</code>这个注解是表示按照方法名的顺序来排序，不然它不会按照我们方法书写的顺序执行，那么就有可能导致，还没save就select，这样就会失败了。<br>
+接下来继续编写方法体。<code>goodRepository</code>跟我们直接<code>data-jpa</code>的<code>respository</code>用法基本一致。都有继承<code>save,delete,find</code>方法的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">save</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Good good = <span class="keyword">new</span> Good();</span><br><span class="line">        good.setId(<span class="string">"100"</span>)</span><br><span class="line">                .setName(<span class="string">"联想e541"</span>)</span><br><span class="line">                .setDesc(<span class="string">"联想e系列"</span>)</span><br><span class="line">                .setNumber(<span class="number">10</span>);</span><br><span class="line">        Good result = goodRepository.save(good);</span><br><span class="line">        Assert.assertNotNull(result);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">select</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">// 需要注意find方法返回的死Optional对象 需要调用get方法返回具体的实体类对象</span></span><br><span class="line">        Good result = goodRepository.findById(<span class="string">"100"</span>).get();</span><br><span class="line">        Assert.assertNotNull(result);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">update</span><span class="params">()</span></span>&#123;</span><br><span class="line">        Good result = goodRepository.findById(<span class="string">"100"</span>).get();</span><br><span class="line">        result.setNumber(<span class="number">300</span>);</span><br><span class="line">        <span class="comment">// 更新也是调用save方法</span></span><br><span class="line">        Good good = goodRepository.save(result);</span><br><span class="line">        Assert.assertNotNull(good);</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">delete</span><span class="params">()</span></span>&#123;</span><br><span class="line">        goodRepository.deleteById(<span class="string">"100"</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>我们首先测试增删改查方法。并且通过Assert断言来判断。</p>
+<p><img src="https://upload-images.jianshu.io/upload_images/5338436-7cfb53c208dcaab7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"><br>
+测试通过，<br>
+接下来我测试一下分页查询方法，首页我们看一下es中、goods索引computer类别下有哪些文档。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl -XGET  <span class="string">'http://127.0.0.1:9200/goods/computer/_search?pretty'</span></span><br></pre></td></tr></table></figure>
+<p>结果如下</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"took"</span> : <span class="number">21</span>,</span><br><span class="line">  <span class="attr">"timed_out"</span> : <span class="literal">false</span>,</span><br><span class="line">  <span class="attr">"_shards"</span> : &#123;</span><br><span class="line">    <span class="attr">"total"</span> : <span class="number">5</span>,</span><br><span class="line">    <span class="attr">"successful"</span> : <span class="number">5</span>,</span><br><span class="line">    <span class="attr">"skipped"</span> : <span class="number">0</span>,</span><br><span class="line">    <span class="attr">"failed"</span> : <span class="number">0</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"hits"</span> : &#123;</span><br><span class="line">    <span class="attr">"total"</span> : <span class="number">3</span>,</span><br><span class="line">    <span class="attr">"max_score"</span> : <span class="number">1.0</span>,</span><br><span class="line">    <span class="attr">"hits"</span> : [</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">"_index"</span> : <span class="string">"goods"</span>,</span><br><span class="line">        <span class="attr">"_type"</span> : <span class="string">"computer"</span>,</span><br><span class="line">        <span class="attr">"_id"</span> : <span class="string">"_search"</span>,</span><br><span class="line">        <span class="attr">"_score"</span> : <span class="number">1.0</span>,</span><br><span class="line">        <span class="attr">"_source"</span> : &#123;</span><br><span class="line">          <span class="attr">"id"</span> : <span class="string">"_search"</span>,</span><br><span class="line">          <span class="attr">"name"</span> : <span class="string">"macbook"</span>,</span><br><span class="line">          <span class="attr">"number"</span> : <span class="number">20</span>,</span><br><span class="line">          <span class="attr">"desc"</span> : <span class="string">"macbook air"</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">"_index"</span> : <span class="string">"goods"</span>,</span><br><span class="line">        <span class="attr">"_type"</span> : <span class="string">"computer"</span>,</span><br><span class="line">        <span class="attr">"_id"</span> : <span class="string">"2"</span>,</span><br><span class="line">        <span class="attr">"_score"</span> : <span class="number">1.0</span>,</span><br><span class="line">        <span class="attr">"_source"</span> : &#123;</span><br><span class="line">          <span class="attr">"id"</span> : <span class="string">"2"</span>,</span><br><span class="line">          <span class="attr">"name"</span> : <span class="string">"think pad"</span>,</span><br><span class="line">          <span class="attr">"number"</span> : <span class="number">20</span>,</span><br><span class="line">          <span class="attr">"desc"</span> : <span class="string">"联想旗下thinkpad系列"</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;,</span><br><span class="line">      &#123;</span><br><span class="line">        <span class="attr">"_index"</span> : <span class="string">"goods"</span>,</span><br><span class="line">        <span class="attr">"_type"</span> : <span class="string">"computer"</span>,</span><br><span class="line">        <span class="attr">"_id"</span> : <span class="string">"1"</span>,</span><br><span class="line">        <span class="attr">"_score"</span> : <span class="number">1.0</span>,</span><br><span class="line">        <span class="attr">"_source"</span> : &#123;</span><br><span class="line">          <span class="attr">"id"</span> : <span class="string">"1"</span>,</span><br><span class="line">          <span class="attr">"name"</span> : <span class="string">"macbook"</span>,</span><br><span class="line">          <span class="attr">"number"</span> : <span class="number">20</span>,</span><br><span class="line">          <span class="attr">"desc"</span> : <span class="string">"macbook pro"</span></span><br><span class="line">        &#125;</span><br><span class="line">      &#125;</span><br><span class="line">    ]</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我看到在computer类别中存有三条文档，name分别是 <code>macbook</code> <code>think pad</code> <code>macbook</code>,所以我们查询一下name=macbook的文档，pageSize=1,pageNum=1.</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findByName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String name = <span class="string">"macbook"</span>;</span><br><span class="line">        Pageable pageable = <span class="keyword">new</span> PageRequest(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">        Page&lt;Good&gt; goods = goodRepository.findByName(name, pageable);</span><br><span class="line">        System.out.println(goods.getContent());</span><br><span class="line">        Assert.assertEquals(<span class="number">1</span>, goods.getSize());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>我们查询name为macbook的数据，并且限制每页一条，所以我们查询的结果总数应该是一条。结果如下。<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-f6e5193ac482182a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
+<p>在这节，我们了解了springboot与es的curd操作，都是比较简单的，那么下节我们会详细了解springboot对es如何进行复杂查询，与聚合查询。<br>
+最后本节的配套代码地址为<a href="https://github.com/YuKongEr/SpringBoot-Study/tree/master/chapter10" target="_blank" rel="noopener">https://github.com/YuKongEr/SpringBoot-Study/tree/master/chapter10</a></p>
+<p>最后欢迎大家关注一下我的个人公众号。一起交流一起学习，有问必答。<br>
+<img src="https://upload-images.jianshu.io/upload_images/5338436-ddb4dd1530787751.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="公众号"></p>
+
+        
+        </div>
+        <footer class="article-footer">
+            
+            
+		        <!-- 添加捐赠图标 -->
+<div class="post-donate">
+    <div id="donate_board" class="donate_bar center">
+        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
+        <span class="donate_txt">
+
+		   如果您觉得文章不错,可以请我喝一杯咖啡！
+        </span>
+        <br>
+      </div>  
+	<div id="donate_guide" class="donate_bar center hidden">
+		<!-- 支付宝打赏图案 -->
+		<img src="/img/zhifubao.jpg" alt="支付宝打赏"> 
+		<!-- 微信打赏图案 -->
+		<img src="/img/weixin.jpg" alt="微信打赏">  
+    </div>
+	<script type="text/javascript">
+		document.getElementById('btn_donate').onclick = function(){
+			if($('#donate_guide').hasClass('hidden')){
+				$('#donate_guide').removeClass('hidden');
+			}else{
+				$('#donate_guide').addClass('hidden');
+			}
+		}
+	</script>
+</div>
+<!-- 添加捐赠图标 -->
+	        
+            <div class="share-container">
+
+
+    <div class="bdsharebuttonbox">
+    <a href="#" class="bds_more" data-cmd="more">分享到：</a>
+    <a href="#" class="bds_qzone" data-cmd="qzone" title="分享到QQ空间">QQ空间</a>
+    <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博">新浪微博</a>
+    <a href="#" class="bds_tqq" data-cmd="tqq" title="分享到腾讯微博">腾讯微博</a>
+    <a href="#" class="bds_renren" data-cmd="renren" title="分享到人人网">人人网</a>
+    <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信">微信</a>
+</div>
+<script>
+window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"16"},"share":{"bdSize":16}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+</script>
+<style>
+    .bdshare_popup_box {
+        border-radius: 4px;
+        border: #e1e1e1 solid 1px;
+    }
+    .bdshare-button-style0-16 a,
+    .bdshare-button-style0-16 .bds_more {
+        padding-left: 20px;
+        margin: 6px 10px 6px 0;
+    }
+    .bdshare_dialog_list a,
+    .bdshare_popup_list a,
+    .bdshare_popup_bottom a {
+        font-family: 'Microsoft Yahei';
+    }
+    .bdshare_popup_top {
+        display: none;
+    }
+    .bdshare_popup_bottom {
+        height: auto;
+        padding: 5px;
+    }
+</style>
+
+
+</div>
+
+            
+    
+        <a href="http://www.yukonga.cn/2018/09/04/【SpringBoot2-0系列11】SpringBoot之-Elasticsearch完成CURD/#comments" class="article-comment-link">评论</a>
+    
+
+        </footer>
+    </div>
+   
+   <div>
+                <ul class="post-copyright">
+                <li class="post-copyright-author">
+                <strong>博客地址：</strong>http://www.yukonga.cn
+                </li>
+                <li class="post-copyright-author">
+                <strong>本文作者：</strong>yukong
+                </li>
+                <li class="post-copyright-link">
+                <strong>本文标题：</strong>
+                <a href="" title="{{ post.title }}">【SpringBoot2.0系列11】SpringBoot之@Elasticsearch完成CURD</a>
+                </li>
+                <li class="post-copyright-link">
+                <strong>发布时间：</strong>
+                <a href="" title="{{ page.title }}">2018年9月4日 - 18时09分</a>
+                </li>
+                <li class="post-copyright-license">
+                <strong>版权声明： </strong>
+                本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！
+                </li>
+                </ul>
+            <div>
+    
+<nav id="article-nav">
+    
+        <a href="/2018/09/07/【java并发编程实战4】偏向锁-轻量锁-重量锁的那点秘密synchronize实现原理/" id="article-nav-newer" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">上一篇</strong>
+            <div class="article-nav-title">
+                
+                    【java并发编程实战4】偏向锁-轻量锁-重量锁的那点秘密synchronize实现原理
+                
+            </div>
+        </a>
+    
+    
+        <a href="/2018/09/03/【java并发编程实战3】解密volatile/" id="article-nav-older" class="article-nav-link-wrap">
+            <strong class="article-nav-caption">下一篇</strong>
+            <div class="article-nav-title">【java并发编程实战3】解密volatile</div>
+        </a>
+    
+</nav>
+
+
+    
+</div></div></article>
+
+
+    
+    
+        <section id="comments">
+    <div id="lv-container" data-id="city" data-uid="MTAyMC8zOTA5MS8xNTYxOA=="></div>
+</section>
+    
+
+</section>
+            
+                
+<aside id="sidebar">
+   
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">分类</h3>
+        <div class="widget">
+            <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/SpringBoot/">SpringBoot</a><span class="category-list-count">11</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/SpringCloud/">SpringCloud</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java并发编程实战/">java并发编程实战</a><span class="category-list-count">6</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/java网络编程/">java网络编程</a><span class="category-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签</h3>
+        <div class="widget">
+            <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/AIO/">AIO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/AQS/">AQS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/BIO/">BIO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CAS/">CAS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DataSource/">DataSource</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/DynamicDataSource/">DynamicDataSource</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElasticSearch/">ElasticSearch</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ElementUI/">ElementUI</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/FreeMark/">FreeMark</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Lettuce/">Lettuce</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Mybatis/">Mybatis</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NIO/">NIO</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/RabbitMQ/">RabbitMQ</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Redis/">Redis</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Rest/">Rest</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Scheduled/">Scheduled</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Socket/">Socket</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/">SpringBoot</a><span class="tag-list-count">12</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCache/">SpringCache</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringCloud/">SpringCloud</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringDataJpa/">SpringDataJpa</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thymeleaf/">Thymeleaf</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Vue/">Vue</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/atomic/">atomic</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java/">java</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/synchronized/">synchronized</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/volatile/">volatile</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/多线程/">多线程</a><span class="tag-list-count">6</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发编程/">并发编程</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/独占锁/">独占锁</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/线程通信/">线程通信</a><span class="tag-list-count">1</span></li></ul>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap">
+        <h3 class="widget-title">标签云</h3>
+        <div class="widget tagcloud">
+            <a href="/tags/AIO/" style="font-size: 10px;">AIO</a> <a href="/tags/AQS/" style="font-size: 10px;">AQS</a> <a href="/tags/BIO/" style="font-size: 10px;">BIO</a> <a href="/tags/CAS/" style="font-size: 10px;">CAS</a> <a href="/tags/DataSource/" style="font-size: 10px;">DataSource</a> <a href="/tags/DynamicDataSource/" style="font-size: 10px;">DynamicDataSource</a> <a href="/tags/ElasticSearch/" style="font-size: 10px;">ElasticSearch</a> <a href="/tags/ElementUI/" style="font-size: 10px;">ElementUI</a> <a href="/tags/FreeMark/" style="font-size: 10px;">FreeMark</a> <a href="/tags/Lettuce/" style="font-size: 10px;">Lettuce</a> <a href="/tags/Mybatis/" style="font-size: 10px;">Mybatis</a> <a href="/tags/NIO/" style="font-size: 10px;">NIO</a> <a href="/tags/RabbitMQ/" style="font-size: 10px;">RabbitMQ</a> <a href="/tags/Redis/" style="font-size: 13.33px;">Redis</a> <a href="/tags/Rest/" style="font-size: 10px;">Rest</a> <a href="/tags/Scheduled/" style="font-size: 10px;">Scheduled</a> <a href="/tags/Socket/" style="font-size: 10px;">Socket</a> <a href="/tags/SpringBoot/" style="font-size: 20px;">SpringBoot</a> <a href="/tags/SpringCache/" style="font-size: 10px;">SpringCache</a> <a href="/tags/SpringCloud/" style="font-size: 10px;">SpringCloud</a> <a href="/tags/SpringDataJpa/" style="font-size: 10px;">SpringDataJpa</a> <a href="/tags/Thymeleaf/" style="font-size: 10px;">Thymeleaf</a> <a href="/tags/Vue/" style="font-size: 10px;">Vue</a> <a href="/tags/atomic/" style="font-size: 10px;">atomic</a> <a href="/tags/java/" style="font-size: 16.67px;">java</a> <a href="/tags/synchronized/" style="font-size: 10px;">synchronized</a> <a href="/tags/volatile/" style="font-size: 10px;">volatile</a> <a href="/tags/多线程/" style="font-size: 16.67px;">多线程</a> <a href="/tags/并发编程/" style="font-size: 10px;">并发编程</a> <a href="/tags/独占锁/" style="font-size: 10px;">独占锁</a> <a href="/tags/线程通信/" style="font-size: 10px;">线程通信</a>
+        </div>
+    </div>
+
+    
+        
+    <div class="widget-wrap widget-list">
+        <h3 class="widget-title">链接</h3>
+        <div class="widget">
+            <ul>
+                
+                    <li>
+                        <a href="https://www.jianshu.com/u/bc2e35b66293">简书</a>
+                    </li>
+                
+            </ul>
+        </div>
+    </div>
+
+
+    
+    <div id="toTop" class="fa fa-angle-up"></div>
+</aside>
+
+            
+        </div>
+        <footer id="footer">
+    <div class="outer">
+        <div id="footer-info" class="inner">
+            &copy; 2018 yukong<br>
+           Analyse with <script type="text/javascript">var cnzz_protocol = (("https:" == document.location.protocol) ? " https://" : " http://");document.write(unescape("%3Cspan id='cnzz_stat_icon_1274502153'%3E%3C/span%3E%3Cscript src='" + cnzz_protocol + "s13.cnzz.com/z_stat.php%3Fid%3D1274502153%26online%3D1%26show%3Dline' type='text/javascript'%3E%3C/script%3E"));</script>
+        </div>
+        <span id="timeDate">载入天数...</span><span id="times">载入时分秒...</span>
+        <p>Hosted by <a href="https://pages.coding.me" style="font-weight: bold">Coding Pages</a></p>
+<script>
+    var now = new Date(); 
+    function createtime() { 
+        var grt= new Date("08/10/2018 12:49:00");//此处修改你的建站时间或者网站上线时间 
+        now.setTime(now.getTime()+250); 
+        days = (now - grt ) / 1000 / 60 / 60 / 24; dnum = Math.floor(days); 
+        hours = (now - grt ) / 1000 / 60 / 60 - (24 * dnum); hnum = Math.floor(hours); 
+        if(String(hnum).length ==1 ){hnum = "0" + hnum;} minutes = (now - grt ) / 1000 /60 - (24 * 60 * dnum) - (60 * hnum); 
+        mnum = Math.floor(minutes); if(String(mnum).length ==1 ){mnum = "0" + mnum;} 
+        seconds = (now - grt ) / 1000 - (24 * 60 * 60 * dnum) - (60 * 60 * hnum) - (60 * mnum); 
+        snum = Math.round(seconds); if(String(snum).length ==1 ){snum = "0" + snum;} 
+        document.getElementById("timeDate").innerHTML = "本站已安全运行 "+dnum+" 天 "; 
+        document.getElementById("times").innerHTML = hnum + " 小时 " + mnum + " 分 " + snum + " 秒"; 
+    } 
+setInterval("createtime()",250);
+</script>
+
+    </div>
+</footer>
+
+<script src="//cdn.jsdelivr.net/npm/leancloud-storage@3.10.0/dist/av-live-query-min.js"></script>
+<script>
+    var APP_ID = '9XgwSNw7ObTAigmAlXx7liAk-gzGzoHsz';
+    var APP_KEY = 'lGLKIk08g1WODUSzrgE3mXns';
+    AV.init('9XgwSNw7ObTAigmAlXx7liAk-gzGzoHsz','lGLKIk08g1WODUSzrgE3mXns');
+    // 显示次数
+    function showTime(Counter) {
+        var query = new AV.Query("Counter");
+        if($(".leancloud_visitors").length > 0){
+            var url = $(".leancloud_visitors").attr('id').trim();
+            // where field
+            query.equalTo("words", url);
+            // count
+            query.count().then(function (number) {
+                // There are number instances of MyClass where words equals url.
+                $(document.getElementById(url)).text(number?  number : '--');
+            }, function (error) {
+                // error is an instance of AVError.
+            });
+        }
+    }
+    // 追加pv
+    function addCount(Counter) {
+        var url = $(".leancloud_visitors").length > 0 ? $(".leancloud_visitors").attr('id').trim() : 'icafebolger.com';
+        var Counter = AV.Object.extend("Counter");
+        var query = new Counter;
+        query.save({
+            words: url
+        }).then(function (object) {
+        })
+    }
+    $(function () {
+        var Counter = AV.Object.extend("Counter");
+        addCount(Counter);
+        showTime(Counter);
+    });
+</script>
+        
+    
+    
+    <!-- 来必力City版安装代码 -->
+    <script type="text/javascript">
+     (function(d, s) {
+         var j, e = d.getElementsByTagName(s)[0];
+
+         if (typeof LivereTower === 'function') { return; }
+
+         j = d.createElement(s);
+         j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+         j.async = true;
+
+         e.parentNode.insertBefore(j, e);
+     })(document, 'script');
+    </script>
+  <noscript> 为正常使用来必力评论功能请激活JavaScript</noscript>
+  <!-- City版安装代码已完成 -->
+
+
+
+
+
+    
+        <script src="/libs/lightgallery/js/lightgallery.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-thumbnail.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-pager.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-autoplay.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-fullscreen.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-zoom.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-hash.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-share.min.js"></script>
+        <script src="/libs/lightgallery/js/lg-video.min.js"></script>
+    
+    
+        <script src="/libs/justified-gallery/jquery.justifiedGallery.min.js"></script>
+    
+    
+
+
+
+<!-- Custom Scripts -->
+<script src="/js/main.js"></script>
+
+    </div>
+</body>
+</html>
