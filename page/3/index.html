@@ -3,27 +3,18 @@
 <head><meta name="generator" content="Hexo 3.8.0">
     <meta charset="utf-8">
     
-    <title>【SpringBoot2.0系列01】初识SpringBoot | yukong&#39;s blog</title>
+    <title>yukong&#39;s blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <meta name="description" content="想必大家都一定用过spring框架，每次整合spring框架的时候总是会有无穷无尽的xml配置文件，第一次写配置文件的时候，大家还会抱着学习的心态认真读每一个配置，但是当我们每次在构建项目都要写同样的配置文件大家应该会觉得厌烦，尽管只是复制粘贴。那么现在你就不用担心了，使用springboot让你更简单的构建spring应用。">
-<meta name="keywords" content="SpringBoot">
-<meta property="og:type" content="article">
-<meta property="og:title" content="【SpringBoot2.0系列01】初识SpringBoot">
-<meta property="og:url" content="http://www.yukonga.cn/2018/08/14/【SpringBoot2-0系列01】初识SpringBoot/index.html">
+    <meta name="description" content="你若对得起时间，时间便对得起你">
+<meta property="og:type" content="website">
+<meta property="og:title" content="yukong&#39;s blog">
+<meta property="og:url" content="http://www.yukonga.cn/page/3/index.html">
 <meta property="og:site_name" content="yukong&#39;s blog">
-<meta property="og:description" content="想必大家都一定用过spring框架，每次整合spring框架的时候总是会有无穷无尽的xml配置文件，第一次写配置文件的时候，大家还会抱着学习的心态认真读每一个配置，但是当我们每次在构建项目都要写同样的配置文件大家应该会觉得厌烦，尽管只是复制粘贴。那么现在你就不用担心了，使用springboot让你更简单的构建spring应用。">
+<meta property="og:description" content="你若对得起时间，时间便对得起你">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-d2c142a6633ec39a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-190d26d4b8e134f5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-305f00648d01bedc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-cea92176799a5647.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-9bea1db3ec2ac607.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-dc90c849f6a2ab3f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-11-20T06:55:47.280Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【SpringBoot2.0系列01】初识SpringBoot">
-<meta name="twitter:description" content="想必大家都一定用过spring框架，每次整合spring框架的时候总是会有无穷无尽的xml配置文件，第一次写配置文件的时候，大家还会抱着学习的心态认真读每一个配置，但是当我们每次在构建项目都要写同样的配置文件大家应该会觉得厌烦，尽管只是复制粘贴。那么现在你就不用担心了，使用springboot让你更简单的构建spring应用。">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/5338436-d2c142a6633ec39a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="yukong&#39;s blog">
+<meta name="twitter:description" content="你若对得起时间，时间便对得起你">
     
 
     
@@ -243,15 +234,16 @@ var _hmt = _hmt || [];
 </aside>
 
             
-            <section id="main"><article id="post-【SpringBoot2-0系列01】初识SpringBoot" class="article article-type-post" itemscope="" itemprop="blogPost">
+            <section id="main">
+    <article id="post-【SpringBoot2-0系列01】初识SpringBoot" class="article article-type-post" itemscope="" itemprop="blogPost">
     <div class="article-inner">
         
         
             <header class="article-header">
                 
     
-        <h1 class="article-title" itemprop="name">
-            【SpringBoot2.0系列01】初识SpringBoot
+        <h1 itemprop="name">
+            <a class="article-title" href="/2018/08/14/【SpringBoot2-0系列01】初识SpringBoot/">【SpringBoot2.0系列01】初识SpringBoot</a>
         </h1>
     
 
@@ -279,8 +271,6 @@ var _hmt = _hmt || [];
     </div>
 
                         
-                        阅读数量:&nbsp;&nbsp;<span id="/2018/08/14/【SpringBoot2-0系列01】初识SpringBoot/" class="leancloud_visitors" data-flag-title="【SpringBoot2.0系列01】初识SpringBoot" style="color:#009688;font-weight: bold"></span>&nbsp;&nbsp;次
-                        
                     </div>
                 
             </header>
@@ -288,149 +278,15 @@ var _hmt = _hmt || [];
         
         <div class="article-entry" itemprop="articleBody">
         
-            
-            <p>想必大家都一定用过spring框架，每次整合spring框架的时候总是会有无穷无尽的xml配置文件，第一次写配置文件的时候，大家还会抱着学习的心态认真读每一个配置，但是当我们每次在构建项目都要写同样的配置文件大家应该会觉得厌烦，尽管只是复制粘贴。那么现在你就不用担心了，使用springboot让你更简单的构建spring应用。</p>
-<a id="more"></a>
-<h1 id="一-介绍"><a class="markdownIt-Anchor" href="#一-介绍"></a> 一、介绍</h1>
-<p>springboot让我们更加简单快速的构建spring应用，并且内置web容器（tomcat、jetty等）支持jar包的方式启动一个web应用。</p>
-<h4 id="springboot主要优点"><a class="markdownIt-Anchor" href="#springboot主要优点"></a> SpringBoot主要优点：</h4>
-<ul>
-<li>
-<ol>
-<li>为所有Spring开发者更快的入门</li>
-</ol>
-</li>
-<li>
-<ol start="2">
-<li>开箱即用，提供各种默认配置来简化项目配置</li>
-</ol>
-</li>
-<li>
-<ol start="3">
-<li>内嵌式容器简化Web项目</li>
-</ol>
-</li>
-<li>
-<ol start="4">
-<li>没有冗余代码生成和XML配置的要求</li>
-</ol>
-</li>
-</ul>
-<h1 id="二-目标"><a class="markdownIt-Anchor" href="#二-目标"></a> 二、目标</h1>
-<p>本节主要目标是通过构建一个简单的SpringBoot项目，实现一个hello word接口。通过这样一个简单的例子让我们对springboot有一个了解。</p>
-<h1 id="三-实现"><a class="markdownIt-Anchor" href="#三-实现"></a> 三、实现</h1>
-<h2 id="31-环境"><a class="markdownIt-Anchor" href="#31-环境"></a> 3.1、环境</h2>
-<ul>
-<li>java8 及以上</li>
-<li>SpringBoot 2.0.4</li>
-</ul>
-<h2 id="32-构建项目"><a class="markdownIt-Anchor" href="#32-构建项目"></a> 3.2 构建项目</h2>
-<h3 id="321-spring官网-spring-initializr"><a class="markdownIt-Anchor" href="#321-spring官网-spring-initializr"></a> 3.2.1 spring官网 SPRING INITIALIZR</h3>
-<p>1、访问 <code>http://start.spring.io/</code></p>
-<p>2、选择<code>maven</code>构建、使用<code>java</code>语法、并且<code>SpringBoot</code>版本为2.0.4</p>
-<p>具体如图：</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5338436-d2c142a6633ec39a.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>3、点击<code>Generate Project</code> 下载构建成功的项目压缩包</p>
-<p>解压完成之后我们就可以通过IntelliJ IDEA开发工具导入到工程，</p>
-<ul>
-<li>
-<ol>
-<li>菜单中选择File–&gt;New–&gt;Project from Existing Sources…</li>
-</ol>
-</li>
-<li>
-<ol start="2">
-<li>选择解压后的项目文件夹，点击OK</li>
-</ol>
-</li>
-<li>
-<ol start="3">
-<li>点击Import project from external model并选择Maven，点击Next到底为止。</li>
-</ol>
-</li>
-<li>
-<ol start="4">
-<li>如果你的环境有多个版本的JDK，注意到选择Java SDK的时候请选择系统安装1.8版本</li>
-</ol>
-</li>
-</ul>
-<h3 id="322-使用idea构建"><a class="markdownIt-Anchor" href="#322-使用idea构建"></a> 3.2.2 使用idea构建</h3>
-<p>1、打开idea选择<code>new</code> -&gt; <code>project</code> -&gt; <code>SPRING INITIALIZR</code><br>
-<img src="https://upload-images.jianshu.io/upload_images/5338436-190d26d4b8e134f5.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="idea构建"></p>
-<p>2、在ProjectSDK选择<code>jdk8</code><br>
-3、点击<code>next</code> 输入<code>gourpId artifactId</code> 然后继续<code>next</code> 一直到完成就可以<br>
-<img src="https://upload-images.jianshu.io/upload_images/5338436-305f00648d01bedc.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>其实大家看的出来，两种方式都是一样的，只不过用idea省去了我们手动下载介绍并且导入的步骤，稍显方便。</p>
-<h3 id="323-项目结构"><a class="markdownIt-Anchor" href="#323-项目结构"></a> 3.2.3、项目结构</h3>
-<p><img src="https://upload-images.jianshu.io/upload_images/5338436-cea92176799a5647.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>关键目录解释</p>
-<ul>
-<li>1、<code>/src/main/java/</code>  存放项目所有源代码目录</li>
-<li>2、<code>/src/main/resources/</code> 存放项目所有资源文件以及配置文件目录</li>
-<li>3、<code>/src/test/</code> 存放测试代码目录</li>
-</ul>
-<p>其中生成的Chapter1Application和Chapter1ApplicationTests类都可以直接运行来启动当前创建的项目。</p>
-<h2 id="33-添加web模块"><a class="markdownIt-Anchor" href="#33-添加web模块"></a> 3.3、添加web模块</h2>
-<p>打开pom.xml  添加spring-boot-starter-web 即可</p>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependencies&gt;</span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;</span><br><span class="line">            &lt;scope&gt;test&lt;/scope&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line"></span><br><span class="line">        &lt;dependency&gt;</span><br><span class="line">            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">            &lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span><br><span class="line">        &lt;/dependency&gt;</span><br><span class="line">    &lt;/dependencies&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="34-编写hello-world服务"><a class="markdownIt-Anchor" href="#34-编写hello-world服务"></a> 3.4、编写hello world服务</h2>
-<p>在<code>src/main/java</code>目录下的<code>chapter1</code>包下新建一个<code>HelloWorldController.java</code>文件</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RestController</span></span><br><span class="line"><span class="meta">@RequestMapping</span>(<span class="string">"/hello"</span>)</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloWorldController</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@GetMapping</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> <span class="string">"hello world"</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>其中</p>
-<ul>
-<li><code>@RequestController</code>是一个复合注解 ，大家按住ctrl看源码会发现 <code>@RequestController = @Controller +@ResponseBody</code> 那么它的作用就不言而喻了，代表当前类是一个控制器并且返回所有的方法将会返回<code>json</code>数据</li>
-</ul>
-<h2 id="35-启动"><a class="markdownIt-Anchor" href="#35-启动"></a> 3.5 、启动</h2>
-<p>双击打开<code>Chapter1Application</code>文件启动。</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5338436-9bea1db3ec2ac607.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>从图中可以看出日志打印启动tomcat服务的端口是8080 ，代表启动成功。</p>
-<p>打开浏览器访问<code>http://localhost:8080/hello</code></p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5338436-dc90c849f6a2ab3f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image.png"></p>
-<p>那么有时候我们的8080端口被占用了，那么就会启动失败，提示端口被占用，如何改变<code>springboot</code>启动的默认端口呢？</p>
-<p>打开<code>application.yml</code>  这时候大家就会问了 不是<code>application.properties</code>吗 其实yml文件也是配置文件的一种，它的书写简洁，我比较喜欢。</p>
-<p><code>yml写法</code></p>
-<figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line"><span class="attr">  port:</span> <span class="number">9090</span></span><br></pre></td></tr></table></figure>
-<p><code>properties写法</code></p>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">server.port</span>=<span class="string">9090</span></span><br></pre></td></tr></table></figure>
-<p>上面的代码就是设置web服务启动的端口了。</p>
-<h1 id="四-总结"><a class="markdownIt-Anchor" href="#四-总结"></a> 四、总结</h1>
-<p>通过这次学习，我们了解了<code>springboot</code>如何启动一个<code>web</code>服务，并且如何更改<code>web</code>服务启动的默认端口。</p>
-<p>最后配套教程的代码全部在这里<br>
-<a href="https://github.com/YuKongEr/SpringBoot-Study" target="_blank" rel="noopener">github https://github.com/YuKongEr/SpringBoot-Study</a>。麻烦点个star或者fork吧。</p>
-
+            <p></p><p>想必大家都一定用过spring框架，每次整合spring框架的时候总是会有无穷无尽的xml配置文件，第一次写配置文件的时候，大家还会抱着学习的心态认真读每一个配置，但是当我们每次在构建项目都要写同样的配置文件大家应该会觉得厌烦，尽管只是复制粘贴。那么现在你就不用担心了，使用springboot让你更简单的构建spring应用。</p><p></p>
+            <p class="article-more-link">
+                <a href="/2018/08/14/【SpringBoot2-0系列01】初识SpringBoot/#more">查看更多</a>
+            </p>
         
         </div>
         <footer class="article-footer">
             
             
-		        <!-- 添加捐赠图标 -->
-<div class="post-donate">
-    <div id="donate_board" class="donate_bar center">
-        <a id="btn_donate" class="btn_donate" href="javascript:;" title="打赏"></a>
-        <span class="donate_txt">
-
-		   如果您觉得文章不错,可以请我喝一杯咖啡！
-        </span>
-        <br>
-      </div>  
-	<div id="donate_guide" class="donate_bar center hidden">
-		<!-- 支付宝打赏图案 -->
-		<img src="/img/zhifubao.jpg" alt="支付宝打赏"> 
-		<!-- 微信打赏图案 -->
-		<img src="/img/weixin.jpg" alt="微信打赏">  
-    </div>
-	<script type="text/javascript">
-		document.getElementById('btn_donate').onclick = function(){
-			if($('#donate_guide').hasClass('hidden')){
-				$('#donate_guide').removeClass('hidden');
-			}else{
-				$('#donate_guide').addClass('hidden');
-			}
-		}
-	</script>
-</div>
-<!-- 添加捐赠图标 -->
-	        
             <div class="share-container">
 
 
@@ -480,55 +336,13 @@ window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMin
         </footer>
     </div>
    
-   <div>
-                <ul class="post-copyright">
-                <li class="post-copyright-author">
-                <strong>博客地址：</strong>http://www.yukonga.cn
-                </li>
-                <li class="post-copyright-author">
-                <strong>本文作者：</strong>yukong
-                </li>
-                <li class="post-copyright-link">
-                <strong>本文标题：</strong>
-                <a href="" title="{{ post.title }}">【SpringBoot2.0系列01】初识SpringBoot</a>
-                </li>
-                <li class="post-copyright-link">
-                <strong>发布时间：</strong>
-                <a href="" title="{{ page.title }}">2018年8月14日 - 00时08分</a>
-                </li>
-                <li class="post-copyright-license">
-                <strong>版权声明： </strong>
-                本博客所有文章除特别声明外，均采用 <a href="http://creativecommons.org/licenses/by-nc-sa/3.0/cn/" rel="external nofollow" target="_blank">CC BY-NC-SA 3.0 CN</a> 许可协议。转载请注明出处！
-                </li>
-                </ul>
-            <div>
-    
-<nav id="article-nav">
-    
-        <a href="/2018/08/15/【SpringBoot2-0系列02】SpringBoot之使用Thymeleaf视图模板/" id="article-nav-newer" class="article-nav-link-wrap">
-            <strong class="article-nav-caption">上一篇</strong>
-            <div class="article-nav-title">
-                
-                    【SpringBoot2.0系列02】SpringBoot之使用Thymeleaf视图模板
-                
-            </div>
-        </a>
-    
-    
-</nav>
+</article>
 
 
-    
-</div></div></article>
 
-
-    
-    
-        <section id="comments">
-    <div id="lv-container" data-id="city" data-uid="MTAyMC8zOTA5MS8xNTYxOA=="></div>
-</section>
-    
-
+    <nav id="page-nav">
+        <a class="extend prev" rel="prev" href="/page/2/">&laquo; 上一页</a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
+    </nav>
 </section>
             
                 
