@@ -74,7 +74,7 @@
     version: '7.0.1',
     sidebar: {"position":"left","display":"post","offset":12,"onmobile":false,"dimmer":false},
     back2top: true,
-    back2top_sidebar: false,
+    back2top_sidebar: true,
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -145,6 +145,16 @@
 
 
 
+
+  <script>
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "https://hm.baidu.com/hm.js?45b7a3cfe46b3fa2c5d46f59f590664e";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
 
 
 
@@ -497,11 +507,42 @@
           
             
             
+              
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+            
+                <span class="post-meta-item-text">评论数：</span>
+                <a href="/2018/08/22/【SpringBoot2-0系列09】SpringBoot之rabbitmq使用/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2018/08/22/【SpringBoot2-0系列09】SpringBoot之rabbitmq使用/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
           
 
           
           
+            <span id="/2018/08/22/【SpringBoot2-0系列09】SpringBoot之rabbitmq使用/" class="leancloud_visitors" data-flag-title="【SpringBoot2.0系列09】SpringBoot之rabbitmq使用">
+              <span class="post-meta-divider">|</span>
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              
+                <span class="post-meta-item-text">阅读次数：</span>
+              
+                <span class="leancloud-visitors-count"></span>
+            </span>
+          
 
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon">
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv"></span>
+            </span>
           
 
           
@@ -696,6 +737,10 @@ fanout属于广播模式，只要跟它绑定的队列都会通知并且接受�
 
           </div>
           
+
+  
+    <div class="comments" id="comments">
+    </div>
 
   
 
@@ -902,6 +947,13 @@ fanout属于广播模式，只要跟它绑定的队列都会通知并且接受�
       
 
       
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
 
     </div>
   </aside>
@@ -940,6 +992,32 @@ fanout属于广播模式，只要跟它绑定的队列都会通知并且接受�
 
 
         
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-user"></i>
+    </span>
+    <span class="site-uv" title="总访客量">
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+  
+
+  
+    <span class="post-meta-item-icon">
+      <i class="fa fa-eye"></i>
+    </span>
+    <span class="site-pv" title="总访问量">
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
 
 
 
@@ -952,11 +1030,6 @@ fanout属于广播模式，只要跟它绑定的队列都会通知并且接受�
       </div>
     </footer>
 
-    
-      <div class="back-to-top">
-        <i class="fa fa-arrow-up"></i>
-        
-      </div>
     
 
     
@@ -1048,6 +1121,36 @@ fanout属于广播模式，只要跟它绑定的队列都会通知并且接受�
   
 
   
+  
+
+<script src="//cdn1.lncld.net/static/js/3.11.1/av-min.js"></script>
+
+
+
+<script src="//unpkg.com/valine/dist/Valine.min.js"></script>
+
+<script>
+  var GUEST = ['nick', 'mail', 'link'];
+  var guest = 'nick,mail,link';
+  guest = guest.split(',').filter(function(item) {
+    return GUEST.indexOf(item) > -1;
+  });
+  new Valine({
+    el: '#comments',
+    verify: false,
+    notify: false,
+    appId: 'lGLKIk08g1WODUSzrgE3mXns',
+    appKey: '9XgwSNw7ObTAigmAlXx7liAk-gzGzoHsz',
+    placeholder: 'Just go go',
+    avatar: 'mm',
+    meta: guest,
+    pageSize: '10' || 10,
+    visitor: true,
+    lang: 'zh-cn' || 'zh-cn'
+  });
+</script>
+
+
 
 
   
