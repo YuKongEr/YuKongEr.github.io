@@ -2,16 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://www.yukonga.cn/about/index.html</loc>
+    
+    <lastmod>2019-03-22T23:40:31.316Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>http://www.yukonga.cn/categories/index.html</loc>
     
-    <lastmod>2019-03-22T09:08:42.064Z</lastmod>
+    <lastmod>2019-03-22T23:40:25.142Z</lastmod>
     
   </url>
   
   <url>
     <loc>http://www.yukonga.cn/tags/index.html</loc>
     
-    <lastmod>2019-03-22T09:06:36.456Z</lastmod>
+    <lastmod>2019-03-22T23:39:19.334Z</lastmod>
     
   </url>
   
@@ -52,13 +59,6 @@
   
   <url>
     <loc>http://www.yukonga.cn/2018/08/25/%E8%A7%A3%E5%BC%80BIO%E3%80%81NIO%E3%80%81AIO%E7%A5%9E%E7%A7%98%E7%9A%84%E9%9D%A2%E7%BA%B1/</loc>
-    
-    <lastmod>2018-11-20T06:55:47.288Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>http://www.yukonga.cn/about/index.html</loc>
     
     <lastmod>2018-11-20T06:55:47.288Z</lastmod>
     
