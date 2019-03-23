@@ -1,3 +1,18 @@
+body {
+  background: url("/images/bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-position: center;
+}
+@font-face {
+  font-family: Zitiming;
+  src: url("/fonts/Zitiming.ttf");
+}
+.site-title {
+  font-size: 40px !important;
+  font-family: 'Zitiming' !important;
+}
 /* normalize.css v8.0.1 | MIT License | github.com/necolas/normalize.css */
 html {
   line-height: 1.15; /* 1 */
@@ -450,11 +465,11 @@ body {
 .header-inner {
   margin: 0 auto;
   padding: 100px 0 70px;
-  width: calc(100% - 20px);
+  width: 800px;
 }
 @media (min-width: 1200px) {
   .container .header-inner {
-    width: 1160px;
+    width: 1000px;
   }
 }
 @media (min-width: 1600px) {
@@ -464,11 +479,11 @@ body {
 }
 .main-inner {
   margin: 0 auto;
-  width: calc(100% - 20px);
+  width: 800px;
 }
 @media (min-width: 1200px) {
   .container .main-inner {
-    width: 1160px;
+    width: 1000px;
   }
 }
 @media (min-width: 1600px) {
@@ -482,11 +497,11 @@ body {
 .footer-inner {
   box-sizing: border-box;
   margin: 0px auto;
-  width: calc(100% - 20px);
+  width: 800px;
 }
 @media (min-width: 1200px) {
   .container .footer-inner {
-    width: 1160px;
+    width: 1000px;
   }
 }
 @media (min-width: 1600px) {
@@ -1929,7 +1944,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #e0ffab;
+  background: #ff4dff;
 }
 .links-of-blogroll {
   margin-top: 10px;
@@ -2506,11 +2521,11 @@ ul.breadcrumb li+li:last-child {
 .header {
   position: relative;
   margin: 0 auto;
-  width: calc(100% - 20px);
+  width: 800px;
 }
 @media (min-width: 1200px) {
   .header {
-    width: 1160px;
+    width: 1000px;
   }
 }
 @media (min-width: 1600px) {
