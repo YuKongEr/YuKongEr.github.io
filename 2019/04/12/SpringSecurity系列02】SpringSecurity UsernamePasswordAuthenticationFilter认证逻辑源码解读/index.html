@@ -96,20 +96,20 @@
 
 
 
-  <meta name="description" content="概要 前面一节，通过简单配置即可实现SpringSecurity表单认证功能，而今天这一节将通过阅读源码的形式来学习SpringSecurity是如何实现这些功能, 前方高能预警，本篇分析源码篇幅较长。  过滤器链 前面我说过SpringSecurity是基于过滤器链的形式，那么我解析将会介绍一下具体有哪些过滤器。    Filter Class 介绍     SecurityContextPe">
+  <meta name="description" content="概要 前面一节，通过简单配置即可实现SpringSecurity表单认证功能，而今天这一节将通过阅读源码的形式来学习SpringSecurity是如何实现这些功能, 前方高能预警，本篇分析源码篇幅较长。">
 <meta name="keywords" content="SpringBoot,SpringSecurity">
 <meta property="og:type" content="article">
 <meta property="og:title" content="【SpringSecurity系列02】SpringSecurity UsernamePasswordAuthenticationFilter认证逻辑源码解读">
 <meta property="og:url" content="http://www.yukonga.cn/2019/04/12/SpringSecurity系列02】SpringSecurity UsernamePasswordAuthenticationFilter认证逻辑源码解读/index.html">
 <meta property="og:site_name" content="yukong&#39;s blog">
-<meta property="og:description" content="概要 前面一节，通过简单配置即可实现SpringSecurity表单认证功能，而今天这一节将通过阅读源码的形式来学习SpringSecurity是如何实现这些功能, 前方高能预警，本篇分析源码篇幅较长。  过滤器链 前面我说过SpringSecurity是基于过滤器链的形式，那么我解析将会介绍一下具体有哪些过滤器。    Filter Class 介绍     SecurityContextPe">
+<meta property="og:description" content="概要 前面一节，通过简单配置即可实现SpringSecurity表单认证功能，而今天这一节将通过阅读源码的形式来学习SpringSecurity是如何实现这些功能, 前方高能预警，本篇分析源码篇幅较长。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g1zz2l65jtj30wv0u0wg6.jpg">
 <meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g24idht2kwj308c08cq2q.jpg">
-<meta property="og:updated_time" content="2019-04-16T07:37:42.871Z">
+<meta property="og:updated_time" content="2019-04-16T07:53:53.516Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【SpringSecurity系列02】SpringSecurity UsernamePasswordAuthenticationFilter认证逻辑源码解读">
-<meta name="twitter:description" content="概要 前面一节，通过简单配置即可实现SpringSecurity表单认证功能，而今天这一节将通过阅读源码的形式来学习SpringSecurity是如何实现这些功能, 前方高能预警，本篇分析源码篇幅较长。  过滤器链 前面我说过SpringSecurity是基于过滤器链的形式，那么我解析将会介绍一下具体有哪些过滤器。    Filter Class 介绍     SecurityContextPe">
+<meta name="twitter:description" content="概要 前面一节，通过简单配置即可实现SpringSecurity表单认证功能，而今天这一节将通过阅读源码的形式来学习SpringSecurity是如何实现这些功能, 前方高能预警，本篇分析源码篇幅较长。">
 <meta name="twitter:image" content="https://ws4.sinaimg.cn/large/006tNc79ly1g1zz2l65jtj30wv0u0wg6.jpg">
 
 
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-04-16 15:37:42" itemprop="dateModified" datetime="2019-04-16T15:37:42+08:00">2019-04-16</time>
+                <time title="修改时间：2019-04-16 15:53:53" itemprop="dateModified" datetime="2019-04-16T15:53:53+08:00">2019-04-16</time>
               
             
           </span>
@@ -497,6 +497,7 @@
       
         <h2 id="概要"><a class="markdownIt-Anchor" href="#概要"></a> 概要</h2>
 <p>前面一节，通过简单配置即可实现SpringSecurity表单认证功能，而今天这一节将通过阅读源码的形式来学习SpringSecurity是如何实现这些功能, 前方高能预警，<strong><code>本篇分析源码篇幅较长</code></strong>。</p>
+<a id="more"></a>
 <h2 id="过滤器链"><a class="markdownIt-Anchor" href="#过滤器链"></a> 过滤器链</h2>
 <p>前面我说过SpringSecurity是基于过滤器链的形式，那么我解析将会介绍一下具体有哪些过滤器。</p>
 <table>
