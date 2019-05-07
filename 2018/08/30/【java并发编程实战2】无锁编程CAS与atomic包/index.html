@@ -104,13 +104,13 @@
 <meta property="og:site_name" content="yukong&#39;s blog">
 <meta property="og:description" content="无锁编程可能大家在面试的时候会被经常问道，那么何为无锁编程CAS，怎么实现无锁编程CAS？">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-f350e287ad4e724f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="http://cdn.yukong.cn/2019-05-07-055539.jpg">
-<meta property="og:updated_time" content="2019-05-07T05:57:24.997Z">
+<meta property="og:image" content="http://cdn.yukonga.cn/2019-05-07-062455.jpg">
+<meta property="og:image" content="http://cdn.yukonga.cn/2019-05-07-055539.jpg">
+<meta property="og:updated_time" content="2019-05-07T06:25:04.030Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【java并发编程实战2】无锁编程CAS与atomic包">
 <meta name="twitter:description" content="无锁编程可能大家在面试的时候会被经常问道，那么何为无锁编程CAS，怎么实现无锁编程CAS？">
-<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/5338436-f350e287ad4e724f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:image" content="http://cdn.yukonga.cn/2019-05-07-062455.jpg">
 
 
 
@@ -419,7 +419,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-07 13:57:24" itemprop="dateModified" datetime="2019-05-07T13:57:24+08:00">2019-05-07</time>
+                <time title="修改时间：2019-05-07 14:25:04" itemprop="dateModified" datetime="2019-05-07T14:25:04+08:00">2019-05-07</time>
               
             
           </span>
@@ -510,7 +510,7 @@
 <li>N表示新值</li>
 </ul>
 <p>如果V值等于E值，则将V的值设为N。若V值和E值不同，则说明已经有其他线程做了更新，则当前线程什么都不做。通俗的理解就是CAS操作需要我们提供一个期望值，当期望值与当前线程的变量值相同时，说明还没线程修改该值，当前线程可以进行修改，也就是执行CAS操作，但如果期望值与当前线程不符，则说明该值已被其他线程修改，此时不执行更新操作，但可以选择重新读取该变量再尝试再次修改该变量，也可以放弃操作，原理图如下</p>
-<p><img src="https://upload-images.jianshu.io/upload_images/5338436-f350e287ad4e724f.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="1535524330707.png"></p>
+<p><img src="http://cdn.yukonga.cn/2019-05-07-062455.jpg" alt=""></p>
 <p>由于CAS操作属于乐观派，它总认为自己可以成功完成操作，当多个线程同时使用CAS操作一个变量时，只有一个会胜出，并成功更新，其余均会失败，但失败的线程并不会被挂起，仅是被告知失败，并且允许再次尝试，当然也允许失败的线程放弃操作，这点从图中也可以看出来。基于这样的原理，CAS操作即使没有锁，同样知道其他线程对共享资源操作影响，并执行相应的处理措施。同时从这点也可以看出，由于无锁操作中没有锁的存在，因此不可能出现死锁的情况，也就是说无锁操作天生免疫死锁。</p>
 <h2 id="12-cpu指令对cas的支持"><a class="markdownIt-Anchor" href="#12-cpu指令对cas的支持"></a> 1.2、CPU指令对CAS的支持</h2>
 <p>或许我们可能会有这样的疑问，假设存在多个线程执行CAS操作并且CAS的步骤很多，有没有可能在判断V和E相同后，正要赋值时，切换了线程，更改了值。造成了数据不一致呢？答案是否定的，因为CAS是一种系统原语，原语属于操作系统用语范畴，是由若干条指令组成的，用于完成某个功能的一个过程，并且原语的执行必须是连续的，在执行过程中不允许被中断，也就是说CAS是一条CPU的原子指令，不会造成所谓的数据不一致问题。</p>
@@ -540,7 +540,7 @@
 <p><code>AtomicStampedReference</code>每次操作前判断更新的时间戳与预期的时间戳是否一致，这样就巧妙的避免了ABA问题。</p>
 <p>最后大家希望关注一下我的个人公众号。<br>
 欢迎大家关注一下我的个人公众号。一起交流一起学习，有问必答。</p>
-<p><img src="http://cdn.yukong.cn/2019-05-07-055539.jpg" alt=""></p>
+<p><img src="http://cdn.yukonga.cn/2019-05-07-055539.jpg" alt=""></p>
 
       
     </div>

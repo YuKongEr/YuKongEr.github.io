@@ -105,9 +105,9 @@
 <meta property="og:description" content="ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/5338436-7cfb53c208dcaab7.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:image" content="https://ws2.sinaimg.cn/large/006tNc79ly1g2sp9gxq0bj30yg0a80wv.jpg">
-<meta property="og:image" content="http://cdn.yukong.cn/2019-05-07-055539.jpg">
-<meta property="og:updated_time" content="2019-05-07T05:56:13.045Z">
+<meta property="og:image" content="http://cdn.yukonga.cn/2019-05-07-060723.jpg">
+<meta property="og:image" content="http://cdn.yukonga.cn/2019-05-07-055539.jpg">
+<meta property="og:updated_time" content="2019-05-07T06:07:34.476Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="【SpringBoot2.0系列11】SpringBoot之@Elasticsearch完成CURD">
 <meta name="twitter:description" content="ElasticSearch是一个基于Lucene的搜索服务器。它提供了一个分布式多用户能力的全文搜索引擎，基于RESTful web接口。Elasticsearch是用Java开发的，并作为Apache许可条款下的开放源码发布，是当前流行的企业级搜索引擎。设计用于云计算中，能够达到实时搜索，稳定，可靠，快速，安装使用方便。">
@@ -420,7 +420,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-05-07 13:56:13" itemprop="dateModified" datetime="2019-05-07T13:56:13+08:00">2019-05-07</time>
+                <time title="修改时间：2019-05-07 14:07:34" itemprop="dateModified" datetime="2019-05-07T14:07:34+08:00">2019-05-07</time>
               
             
           </span>
@@ -556,11 +556,11 @@ Document –&gt; row 就相当于某一个具体对象</p>
 <p>我看到在computer类别中存有三条文档，name分别是 <code>macbook</code> <code>think pad</code> <code>macbook</code>,所以我们查询一下name=macbook的文档，pageSize=1,pageNum=1.</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">findByName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        String name = <span class="string">"macbook"</span>;</span><br><span class="line">        Pageable pageable = <span class="keyword">new</span> PageRequest(<span class="number">1</span>,<span class="number">1</span>);</span><br><span class="line">        Page&lt;Good&gt; goods = goodRepository.findByName(name, pageable);</span><br><span class="line">        System.out.println(goods.getContent());</span><br><span class="line">        Assert.assertEquals(<span class="number">1</span>, goods.getSize());</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
 <p>我们查询name为macbook的数据，并且限制每页一条，所以我们查询的结果总数应该是一条。结果如下。<br>
-<img src="https://ws2.sinaimg.cn/large/006tNc79ly1g2sp9gxq0bj30yg0a80wv.jpg" alt=""></p>
+<img src="http://cdn.yukonga.cn/2019-05-07-060723.jpg" alt=""></p>
 <p>在这节，我们了解了springboot与es的curd操作，都是比较简单的，那么下节我们会详细了解springboot对es如何进行复杂查询，与聚合查询。<br>
 最后本节的配套代码地址为<a href="https://github.com/YuKongEr/SpringBoot-Study/tree/master/chapter10" target="_blank" rel="noopener">https://github.com/YuKongEr/SpringBoot-Study/tree/master/chapter10</a></p>
 <p>最后欢迎大家关注一下我的个人公众号。一起交流一起学习，有问必答。<br>
-<img src="http://cdn.yukong.cn/2019-05-07-055539.jpg" alt=""></p>
+<img src="http://cdn.yukonga.cn/2019-05-07-055539.jpg" alt=""></p>
 
       
     </div>
