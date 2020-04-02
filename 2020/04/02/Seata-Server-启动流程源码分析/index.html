@@ -96,20 +96,20 @@
 
 
 
-  <meta name="description" content="认识Seata Seata 是一款开源的分布式事务解决方案，致力于提供高性能和简单易用的分布式事务服务。Seata 将为用户提供了 AT、TCC、SAGA 和 XA 事务模式，为用户打造一站式的分布式解决方案。  Seata的TXC模型  根据上图可知整个TXC模型有三个重要的组件  TC 事务协调器,维护全局和分支事务的状态，驱动全局事务提交或回滚。(单独部署) TM  事务管理器 定义全局事">
+  <meta name="description" content="认识Seata Seata 是一款开源的分布式事务解决方案，致力于提供高性能和简单易用的分布式事务服务。Seata 将为用户提供了 AT、TCC、SAGA 和 XA 事务模式，为用户打造一站式的分布式解决方案。">
 <meta name="keywords" content="java,分布式事务,seata">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Seata-Server 启动流程源码分析">
 <meta property="og:url" content="http://www.yukonga.cn/2020/04/02/Seata-Server-启动流程源码分析/index.html">
 <meta property="og:site_name" content="yukong&#39;s blog">
-<meta property="og:description" content="认识Seata Seata 是一款开源的分布式事务解决方案，致力于提供高性能和简单易用的分布式事务服务。Seata 将为用户提供了 AT、TCC、SAGA 和 XA 事务模式，为用户打造一站式的分布式解决方案。  Seata的TXC模型  根据上图可知整个TXC模型有三个重要的组件  TC 事务协调器,维护全局和分支事务的状态，驱动全局事务提交或回滚。(单独部署) TM  事务管理器 定义全局事">
+<meta property="og:description" content="认识Seata Seata 是一款开源的分布式事务解决方案，致力于提供高性能和简单易用的分布式事务服务。Seata 将为用户提供了 AT、TCC、SAGA 和 XA 事务模式，为用户打造一站式的分布式解决方案。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://images.yukonga.cn/20200402132010.png">
 <meta property="og:image" content="http://images.yukonga.cn/20200402132019.png">
-<meta property="og:updated_time" content="2020-04-02T05:21:29.127Z">
+<meta property="og:updated_time" content="2020-04-02T05:29:30.014Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Seata-Server 启动流程源码分析">
-<meta name="twitter:description" content="认识Seata Seata 是一款开源的分布式事务解决方案，致力于提供高性能和简单易用的分布式事务服务。Seata 将为用户提供了 AT、TCC、SAGA 和 XA 事务模式，为用户打造一站式的分布式解决方案。  Seata的TXC模型  根据上图可知整个TXC模型有三个重要的组件  TC 事务协调器,维护全局和分支事务的状态，驱动全局事务提交或回滚。(单独部署) TM  事务管理器 定义全局事">
+<meta name="twitter:description" content="认识Seata Seata 是一款开源的分布式事务解决方案，致力于提供高性能和简单易用的分布式事务服务。Seata 将为用户提供了 AT、TCC、SAGA 和 XA 事务模式，为用户打造一站式的分布式解决方案。">
 <meta name="twitter:image" content="http://images.yukonga.cn/20200402132010.png">
 
 
@@ -402,7 +402,7 @@
                 
               
 
-              <time title="创建时间：2020-04-02 13:19:03 / 修改时间：13:21:29" itemprop="dateCreated datePublished" datetime="2020-04-02T13:19:03+08:00">2020-04-02</time>
+              <time title="创建时间：2020-04-02 13:19:03 / 修改时间：13:29:30" itemprop="dateCreated datePublished" datetime="2020-04-02T13:19:03+08:00">2020-04-02</time>
             
 
             
@@ -485,6 +485,7 @@
       
         <h2 id="认识seata"><a class="markdownIt-Anchor" href="#认识seata"></a> 认识Seata</h2>
 <p>Seata 是一款开源的分布式事务解决方案，致力于提供高性能和简单易用的分布式事务服务。Seata 将为用户提供了 AT、TCC、SAGA 和 XA 事务模式，为用户打造一站式的分布式解决方案。</p>
+<a id="more"></a>
 <h3 id="seata的txc模型"><a class="markdownIt-Anchor" href="#seata的txc模型"></a> Seata的TXC模型</h3>
 <p><img src="http://images.yukonga.cn/20200402132010.png" alt="img"></p>
 <p>根据上图可知整个TXC模型有三个重要的组件</p>

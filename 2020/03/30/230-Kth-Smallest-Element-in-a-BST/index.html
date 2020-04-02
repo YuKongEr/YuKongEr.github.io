@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="230. Kth Smallest Element in a BST  原题地址 230. Kth Smallest Element in a BST   解题思路 由于给的二叉搜索树，总所周知二叉搜索树的中序遍历是有序的。所以这题可以变相的理解的为有序数组的中的第k个数 二叉树的中路遍历有两种方法, 递归、非递归(借助 栈). 我们先看递归  递归解法-1 我们通过中序遍历,把遍历的值存在Li">
-<meta name="keywords" content="leetcode,算法,java,BST">
+  <meta name="description" content="230. Kth Smallest Element in a BST  原题地址 230. Kth Smallest Element in a BST   解题思路 由于给的二叉搜索树，总所周知二叉搜索树的中序遍历是有序的。所以这题可以变相的理解的为有序数组的中的第k个数 二叉树的中路遍历有两种方法, 递归、非递归(借助 栈). 我们先看递归">
+<meta name="keywords" content="leetcode,BST,算法,java">
 <meta property="og:type" content="article">
 <meta property="og:title" content="230. Kth Smallest Element in a BST">
 <meta property="og:url" content="http://www.yukonga.cn/2020/03/30/230-Kth-Smallest-Element-in-a-BST/index.html">
 <meta property="og:site_name" content="yukong&#39;s blog">
-<meta property="og:description" content="230. Kth Smallest Element in a BST  原题地址 230. Kth Smallest Element in a BST   解题思路 由于给的二叉搜索树，总所周知二叉搜索树的中序遍历是有序的。所以这题可以变相的理解的为有序数组的中的第k个数 二叉树的中路遍历有两种方法, 递归、非递归(借助 栈). 我们先看递归  递归解法-1 我们通过中序遍历,把遍历的值存在Li">
+<meta property="og:description" content="230. Kth Smallest Element in a BST  原题地址 230. Kth Smallest Element in a BST   解题思路 由于给的二叉搜索树，总所周知二叉搜索树的中序遍历是有序的。所以这题可以变相的理解的为有序数组的中的第k个数 二叉树的中路遍历有两种方法, 递归、非递归(借助 栈). 我们先看递归">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-30T03:47:21.018Z">
+<meta property="og:updated_time" content="2020-04-02T05:29:25.309Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="230. Kth Smallest Element in a BST">
-<meta name="twitter:description" content="230. Kth Smallest Element in a BST  原题地址 230. Kth Smallest Element in a BST   解题思路 由于给的二叉搜索树，总所周知二叉搜索树的中序遍历是有序的。所以这题可以变相的理解的为有序数组的中的第k个数 二叉树的中路遍历有两种方法, 递归、非递归(借助 栈). 我们先看递归  递归解法-1 我们通过中序遍历,把遍历的值存在Li">
+<meta name="twitter:description" content="230. Kth Smallest Element in a BST  原题地址 230. Kth Smallest Element in a BST   解题思路 由于给的二叉搜索树，总所周知二叉搜索树的中序遍历是有序的。所以这题可以变相的理解的为有序数组的中的第k个数 二叉树的中路遍历有两种方法, 递归、非递归(借助 栈). 我们先看递归">
 
 
 
@@ -399,12 +399,24 @@
                 
               
 
-              <time title="创建时间：2020-03-30 11:44:20 / 修改时间：11:47:21" itemprop="dateCreated datePublished" datetime="2020-03-30T11:44:20+08:00">2020-03-30</time>
+              <time title="创建时间：2020-03-30 11:44:20" itemprop="dateCreated datePublished" datetime="2020-03-30T11:44:20+08:00">2020-03-30</time>
             
 
             
               
 
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">更新于</span>
+                
+                <time title="修改时间：2020-04-02 13:29:25" itemprop="dateModified" datetime="2020-04-02T13:29:25+08:00">2020-04-02</time>
               
             
           </span>
@@ -488,6 +500,7 @@
 <p>由于给的二叉搜索树，总所周知二叉搜索树的中序遍历是有序的。所以这题可以变相的理解的为有序数组的中的第k个数</p>
 <p>二叉树的中路遍历有两种方法, 递归、非递归(借助 栈).</p>
 <p>我们先看递归</p>
+<a id="more"></a>
 <h3 id="递归解法-1"><a class="markdownIt-Anchor" href="#递归解法-1"></a> 递归解法-1</h3>
 <p>我们通过中序遍历,把遍历的值存在<code>List&lt;Integer&gt; res</code> 中, 然后返回<code>res.get(k -1)</code> 即,.很容易写出如下代码.</p>
 <h4 id="ac代码"><a class="markdownIt-Anchor" href="#ac代码"></a> AC代码</h4>
@@ -597,11 +610,11 @@
           
             <a href="/tags/leetcode/" rel="tag"><i class="fa fa-tag"></i> leetcode</a>
           
+            <a href="/tags/BST/" rel="tag"><i class="fa fa-tag"></i> BST</a>
+          
             <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
           
             <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
-          
-            <a href="/tags/BST/" rel="tag"><i class="fa fa-tag"></i> BST</a>
           
         </div>
       
