@@ -96,21 +96,21 @@
 
 
 
-  <meta name="description" content="无锁编程可能大家在面试的时候会被经常问道，那么何为无锁编程CAS，怎么实现无锁编程CAS？">
-<meta name="keywords" content="java,多线程,CAS,atomic">
+  <meta name="description" content="认识Seata Seata 是一款开源的分布式事务解决方案，致力于提供高性能和简单易用的分布式事务服务。Seata 将为用户提供了 AT、TCC、SAGA 和 XA 事务模式，为用户打造一站式的分布式解决方案。  Seata的TXC模型  根据上图可知整个TXC模型有三个重要的组件  TC 事务协调器,维护全局和分支事务的状态，驱动全局事务提交或回滚。(单独部署) TM  事务管理器 定义全局事">
+<meta name="keywords" content="java,分布式事务,seata">
 <meta property="og:type" content="article">
-<meta property="og:title" content="【java并发编程实战2】无锁编程CAS与atomic包">
-<meta property="og:url" content="http://www.yukonga.cn/2018/08/30/【java并发编程实战2】无锁编程CAS与atomic包/index.html">
+<meta property="og:title" content="Seata-Server 启动流程源码分析">
+<meta property="og:url" content="http://www.yukonga.cn/2020/04/02/Seata-Server-启动流程源码分析/index.html">
 <meta property="og:site_name" content="yukong&#39;s blog">
-<meta property="og:description" content="无锁编程可能大家在面试的时候会被经常问道，那么何为无锁编程CAS，怎么实现无锁编程CAS？">
+<meta property="og:description" content="认识Seata Seata 是一款开源的分布式事务解决方案，致力于提供高性能和简单易用的分布式事务服务。Seata 将为用户提供了 AT、TCC、SAGA 和 XA 事务模式，为用户打造一站式的分布式解决方案。  Seata的TXC模型  根据上图可知整个TXC模型有三个重要的组件  TC 事务协调器,维护全局和分支事务的状态，驱动全局事务提交或回滚。(单独部署) TM  事务管理器 定义全局事">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://cdn.yukonga.cn/2019-05-07-062455.jpg">
-<meta property="og:image" content="http://cdn.yukonga.cn/2019-05-07-055539.jpg">
-<meta property="og:updated_time" content="2019-05-07T06:25:04.030Z">
+<meta property="og:image" content="http://images.yukonga.cn/20200402132010.png">
+<meta property="og:image" content="http://images.yukonga.cn/20200402132019.png">
+<meta property="og:updated_time" content="2020-04-02T05:21:29.127Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="【java并发编程实战2】无锁编程CAS与atomic包">
-<meta name="twitter:description" content="无锁编程可能大家在面试的时候会被经常问道，那么何为无锁编程CAS，怎么实现无锁编程CAS？">
-<meta name="twitter:image" content="http://cdn.yukonga.cn/2019-05-07-062455.jpg">
+<meta name="twitter:title" content="Seata-Server 启动流程源码分析">
+<meta name="twitter:description" content="认识Seata Seata 是一款开源的分布式事务解决方案，致力于提供高性能和简单易用的分布式事务服务。Seata 将为用户提供了 AT、TCC、SAGA 和 XA 事务模式，为用户打造一站式的分布式解决方案。  Seata的TXC模型  根据上图可知整个TXC模型有三个重要的组件  TC 事务协调器,维护全局和分支事务的状态，驱动全局事务提交或回滚。(单独部署) TM  事务管理器 定义全局事">
+<meta name="twitter:image" content="http://images.yukonga.cn/20200402132010.png">
 
 
 
@@ -119,7 +119,7 @@
 
 
 
-  <link rel="canonical" href="http://www.yukonga.cn/2018/08/30/【java并发编程实战2】无锁编程CAS与atomic包/">
+  <link rel="canonical" href="http://www.yukonga.cn/2020/04/02/Seata-Server-启动流程源码分析/">
 
 
 
@@ -129,7 +129,7 @@
   };
 </script>
 
-  <title>【java并发编程实战2】无锁编程CAS与atomic包 | yukong's blog</title>
+  <title>Seata-Server 启动流程源码分析 | yukong's blog</title>
   
 
 
@@ -359,7 +359,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yukonga.cn/2018/08/30/【java并发编程实战2】无锁编程CAS与atomic包/">
+    <link itemprop="mainEntityOfPage" href="http://www.yukonga.cn/2020/04/02/Seata-Server-启动流程源码分析/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yukong">
@@ -376,7 +376,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">【java并发编程实战2】无锁编程CAS与atomic包
+          <h1 class="post-title" itemprop="name headline">Seata-Server 启动流程源码分析
 
               
             
@@ -402,24 +402,12 @@
                 
               
 
-              <time title="创建时间：2018-08-30 14:35:34" itemprop="dateCreated datePublished" datetime="2018-08-30T14:35:34+08:00">2018-08-30</time>
+              <time title="创建时间：2020-04-02 13:19:03 / 修改时间：13:21:29" itemprop="dateCreated datePublished" datetime="2020-04-02T13:19:03+08:00">2020-04-02</time>
             
 
             
               
 
-              
-                
-                <span class="post-meta-divider">|</span>
-                
-
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                
-                  <span class="post-meta-item-text">更新于</span>
-                
-                <time title="修改时间：2019-05-07 14:25:04" itemprop="dateModified" datetime="2019-05-07T14:25:04+08:00">2019-05-07</time>
               
             
           </span>
@@ -436,7 +424,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/java并发编程实战/" itemprop="url" rel="index"><span itemprop="name">java并发编程实战</span></a></span>
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing"><a href="/categories/seata/" itemprop="url" rel="index"><span itemprop="name">seata</span></a></span>
 
                 
                 
@@ -455,8 +443,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2018/08/30/【java并发编程实战2】无锁编程CAS与atomic包/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2018/08/30/【java并发编程实战2】无锁编程CAS与atomic包/" itemprop="commentCount"></span>
+                <a href="/2020/04/02/Seata-Server-启动流程源码分析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/02/Seata-Server-启动流程源码分析/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -464,7 +452,7 @@
 
           
           
-            <span id="/2018/08/30/【java并发编程实战2】无锁编程CAS与atomic包/" class="leancloud_visitors" data-flag-title="【java并发编程实战2】无锁编程CAS与atomic包">
+            <span id="/2020/04/02/Seata-Server-启动流程源码分析/" class="leancloud_visitors" data-flag-title="Seata-Server 启动流程源码分析">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -495,52 +483,68 @@
       
 
       
-        <p>无锁编程可能大家在面试的时候会被经常问道，那么何为无锁编程CAS，怎么实现无锁编程CAS？</p>
-<a id="more"></a>
-<h1 id="1-无锁编程cas"><a class="markdownIt-Anchor" href="#1-无锁编程cas"></a> 1、无锁编程CAS</h1>
-<h2 id="11-cas"><a class="markdownIt-Anchor" href="#11-cas"></a> 1.1、CAS</h2>
-<p>CAS的全称是Compare And Swap 即比较交换，其算法核心思想如下</p>
-<blockquote>
-<p>执行函数：CAS(V,E,N)</p>
-</blockquote>
-<p>其包含3个参数</p>
+        <h2 id="认识seata"><a class="markdownIt-Anchor" href="#认识seata"></a> 认识Seata</h2>
+<p>Seata 是一款开源的分布式事务解决方案，致力于提供高性能和简单易用的分布式事务服务。Seata 将为用户提供了 AT、TCC、SAGA 和 XA 事务模式，为用户打造一站式的分布式解决方案。</p>
+<h3 id="seata的txc模型"><a class="markdownIt-Anchor" href="#seata的txc模型"></a> Seata的TXC模型</h3>
+<p><img src="http://images.yukonga.cn/20200402132010.png" alt="img"></p>
+<p>根据上图可知整个TXC模型有三个重要的组件</p>
 <ul>
-<li>V表示要更新的变量</li>
-<li>E表示预期值</li>
-<li>N表示新值</li>
+<li>TC 事务协调器,维护全局和分支事务的状态，驱动全局事务提交或回滚。(单独部署)</li>
+<li>TM  事务管理器 定义全局事务的范围：开始全局事务、提交或回滚全局事务。</li>
+<li>RM 资源管理器 管理分支事务处理的资源，与TC交谈以注册分支事务和报告分支事务的状态，并驱动分支事务提交或回滚。</li>
 </ul>
-<p>如果V值等于E值，则将V的值设为N。若V值和E值不同，则说明已经有其他线程做了更新，则当前线程什么都不做。通俗的理解就是CAS操作需要我们提供一个期望值，当期望值与当前线程的变量值相同时，说明还没线程修改该值，当前线程可以进行修改，也就是执行CAS操作，但如果期望值与当前线程不符，则说明该值已被其他线程修改，此时不执行更新操作，但可以选择重新读取该变量再尝试再次修改该变量，也可以放弃操作，原理图如下</p>
-<p><img src="http://cdn.yukonga.cn/2019-05-07-062455.jpg" alt=""></p>
-<p>由于CAS操作属于乐观派，它总认为自己可以成功完成操作，当多个线程同时使用CAS操作一个变量时，只有一个会胜出，并成功更新，其余均会失败，但失败的线程并不会被挂起，仅是被告知失败，并且允许再次尝试，当然也允许失败的线程放弃操作，这点从图中也可以看出来。基于这样的原理，CAS操作即使没有锁，同样知道其他线程对共享资源操作影响，并执行相应的处理措施。同时从这点也可以看出，由于无锁操作中没有锁的存在，因此不可能出现死锁的情况，也就是说无锁操作天生免疫死锁。</p>
-<h2 id="12-cpu指令对cas的支持"><a class="markdownIt-Anchor" href="#12-cpu指令对cas的支持"></a> 1.2、CPU指令对CAS的支持</h2>
-<p>或许我们可能会有这样的疑问，假设存在多个线程执行CAS操作并且CAS的步骤很多，有没有可能在判断V和E相同后，正要赋值时，切换了线程，更改了值。造成了数据不一致呢？答案是否定的，因为CAS是一种系统原语，原语属于操作系统用语范畴，是由若干条指令组成的，用于完成某个功能的一个过程，并且原语的执行必须是连续的，在执行过程中不允许被中断，也就是说CAS是一条CPU的原子指令，不会造成所谓的数据不一致问题。</p>
-<h1 id="2-atomic族类"><a class="markdownIt-Anchor" href="#2-atomic族类"></a> 2、 atomic族类</h1>
-<p>在atomic包下共有AtomicBoolean、AtomicInteger、AtomicIntegerArray、AtmoicReference、AtomicReferenceFieldUpdater、LongAdder等类。</p>
-<p>在上面线程不安全的例子中，我们用1000个线程调用整型变量的i的自增，然后输出i最后的大小，在多线程情况下，这明显是线程不安全的，因为<code>i++</code>不是原子操作，这里我们可以使用AtomicInteger代替Integer。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">AtomicIntegerExample</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 并发线程数目</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> threadNum = <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 闭锁</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> CountDownLatch countDownLatch  = <span class="keyword">new</span> CountDownLatch(threadNum);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> AtomicInteger i = <span class="keyword">new</span> AtomicInteger(<span class="number">0</span>);</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        ExecutorService executorService = Executors.newCachedThreadPool();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; threadNum; j++) &#123;</span><br><span class="line">            executorService.execute(() -&gt; &#123;</span><br><span class="line">                add();</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 使用闭锁保证当所有统计线程完成后，主线程输出统计结果。 其实这里也可以使用Thread.sleep() 让主线程阻塞等待一会儿实现</span></span><br><span class="line">        countDownLatch.await();</span><br><span class="line">        System.out.println(i.get());</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        countDownLatch.countDown();</span><br><span class="line">        i.getAndIncrement();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>上面的代码就是线程安全的，运行输出 i=1000,这是为什么呢。我们来看看<code>getAndIncrement()</code>方法的实现</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment">    * Atomically increments by one the current value.</span></span><br><span class="line"><span class="comment">    *</span></span><br><span class="line"><span class="comment">    * <span class="doctag">@return</span> the previous value</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndIncrement</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> unsafe.getAndAddInt(<span class="keyword">this</span>, valueOffset, <span class="number">1</span>);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
-<p>我们看到方法是由一个unsafe对象的getAndAddInt方法实现。我们继续点进去看看getAndAddInt方法的实现。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">getAndAddInt</span><span class="params">(Object var1, <span class="keyword">long</span> var2, <span class="keyword">int</span> var4)</span> </span>&#123;</span><br><span class="line">       <span class="comment">//</span></span><br><span class="line">       <span class="keyword">int</span> var5;</span><br><span class="line">       <span class="keyword">do</span> &#123;</span><br><span class="line">           var5 = <span class="keyword">this</span>.getIntVolatile(var1, var2);</span><br><span class="line">       &#125; <span class="keyword">while</span>(!<span class="keyword">this</span>.compareAndSwapInt(var1, var2, var5, var5 + var4));</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> var5;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
-<p>上面就是<code>getAndAddInt</code>方法的实现,具体流程如下，</p>
-<p>1、首先根据当前的传过来的对象指针，获取期望的值  var5,</p>
-<p>2、然后while判断调用compareAndSwapInt方法 ，这是一个native本地方法，它有四个参数，</p>
-<p>第一个参数，当前的对象，第二个参数实际的值，第三个参数期望的值，第四个参数想要更新的值。</p>
-<p>只有实际的值等于期望的值的时候，才会把值更新成第四个参数，也就是想要的更新的值，否则一直循环尝试。</p>
-<p>这也就是无锁编程，CAS。</p>
-<p>在高并发的场景，这种循环尝试的次数会比较高，成功率会比较低，这样性能会比较差。但是在JDK8中推出了一个新的类名为<code>LongAdder</code></p>
-<p>我们看看它的用法。我们也继续上面的求和的例子，只需要把<code>AtomicInteger</code>改成<code>LongAddr</code>然后更改对应调用的方法即可。具体代码如下。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">LongAdderExample</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 并发线程数目</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> threadNum = <span class="number">1000</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * 闭锁</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> CountDownLatch countDownLatch  = <span class="keyword">new</span> CountDownLatch(threadNum);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> LongAdder i = <span class="keyword">new</span> LongAdder();</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</span><br><span class="line">        ExecutorService executorService = Executors.newCachedThreadPool();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; threadNum; j++) &#123;</span><br><span class="line">            executorService.execute(() -&gt; &#123;</span><br><span class="line">                add();</span><br><span class="line">            &#125;);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 使用闭锁保证当所有统计线程完成后，主线程输出统计结果。 其实这里也可以使用Thread.sleep() 让主线程阻塞等待一会儿实现</span></span><br><span class="line">        countDownLatch.await();</span><br><span class="line">        System.out.println(i);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">add</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        countDownLatch.countDown();</span><br><span class="line">        i.increment();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>运行程序，发现结果与预期的一样i=1000，是线程安全的。那么我们看看它又是如何。保证线程安全的呢。</p>
-<p>由于篇幅原因我不跟入源码讲解了，大致思想与ConcurrentHashMapy大致一致，采用的是热点分离法，</p>
-<p>把value分成base+cells数组，避免所有的写操作都是在value上面，这样就保证提高性能，但是在多线程情况下，统计会有误差。</p>
-<p>接着我们讲解CAS中常常会遇到的ABA问题。</p>
-<p>比如说一个线程one从内存位置V中取出A，这时候另一个线程two也从内存中取出A，并且two进行了一些操作变成了B，然后two又将V位置的数据变成A，这时候线程one进行CAS操作发现内存中仍然是A，然后one操作成功。尽管线程one的CAS操作成功，但是不代表这个过程就是没有问题的。如果链表的头在变化了两次后恢复了原值，但是不代表链表就没有变化。</p>
-<p>这里我们可以借助乐观锁的一个概念，使用version版本号来判断是否一致，每次操作后版本号加1如果两次对比版本号一致才交换，这样就避免了ABA问题，在atomic包下面也提供了对应的类<code>AtomicStampedReference</code>。</p>
-<p><code>AtomicStampedReference</code>每次操作前判断更新的时间戳与预期的时间戳是否一致，这样就巧妙的避免了ABA问题。</p>
-<p>最后大家希望关注一下我的个人公众号。<br>
-欢迎大家关注一下我的个人公众号。一起交流一起学习，有问必答。</p>
-<p><img src="http://cdn.yukonga.cn/2019-05-07-055539.jpg" alt=""></p>
+<p>简单理解就是TM事务管理器通过RPC与TC通讯请求开启一个全局事务</p>
+<p>简单理解过程就是: Business作为服务起始方(此时它是TM)发起全局事务并注册到TC。在调用协同服务时，协同服务的事务分支事务会先完成阶段一的事务提交或回滚，并生成事务回滚的undo_log日志，同时注册当前服务到TC并上报其事务状态，归并到同一个业务的全局事务中。此时若没有问题继续下一个服务的调用，期间任何服务的分支事务回滚，都会通知到TC，TC在通知全局事务包含的所有已完成一阶段提交的分支事务回滚。如果所有分支事务都正常，最后回到全局事务发起方时，也会通知到TC，TC在通知全局事务包含的所有分支删除回滚日志。在这个过程中为了解决写隔离和度隔离的问题会涉及到TC管理的全局锁。</p>
+<p>那么全局事务是如何在服务中传递的呢？实际在TM向TC请求开启一个全局事务的时候，TC会响应一个全局事务XID，只需要TM在调用其他协同服务时把XID传递给协同服务，这样就可以实现全局事务在分布式服务中传播，以及分支事务属于哪个全局事务。</p>
+<p>Seata目前已经支持许多框架中的XID的自动传递了</p>
+<ul>
+<li>
+<p>dubbo</p>
+</li>
+<li>
+<p>spring cloud</p>
+</li>
+<li>
+<p>sofa-rpc</p>
+</li>
+</ul>
+<p>用户在使用Seata的时候对于XID的传递完全是无感知。</p>
+<p>上文提到Seata中三个重要的组件<code>TC TM RM</code>.</p>
+<p>其中TC作为事务协调者, 它负责驱动全局事务的提交与回滚。根据它的职责可知。它的重要性不言而喻。</p>
+<p>那么作为一个优秀的协调者它需要具备哪些功能呢？</p>
+<ul>
+<li>高可用</li>
+<li>高性能</li>
+<li>支持扩展</li>
+</ul>
+<p>那么我们根据我们的猜测来看看TC的实现模块Server是怎么来实现这写功能的。</p>
+<h2 id="server模块介绍"><a class="markdownIt-Anchor" href="#server模块介绍"></a> Server模块介绍</h2>
+<p><img src="http://images.yukonga.cn/20200402132019.png" alt="image-20200331221613306"></p>
+<p>整个Server模块可以分成7个主要模块</p>
+<ul>
+<li>RPC模块 负责与TM RM交互</li>
+<li>Coordinator Core模块 TC实现事务协调的核心模块</li>
+<li>Lock模块 资源全局锁的实现</li>
+<li>Config模块 支持配置TC的配置模块</li>
+<li>Store模块 TC运行时全局事务以及分支事务的相关信息需要通过Store模块持久化</li>
+<li>Discover模块 Seata TC服务注册发现模块</li>
+<li>HA-Cluste模块 TC Server实现高可用的模块</li>
+</ul>
+<p>就一个Server端而言, 它就有7个模块。那么我们改从何看起呢。</p>
+<p>我们可以用Server启动的main函数来理解清楚整个TC的运行流程</p>
+<h2 id="server启动流程"><a class="markdownIt-Anchor" href="#server启动流程"></a> Server启动流程</h2>
+<p>本文所有源码基于<code>Seata1.1.0</code> 个人能力有限,如有不对欢迎指出。</p>
+<p>整个Server端是一个<code>java</code>应用,它是通过<code>java -jar</code>启动的,所以主入口是一个main函数。</p>
+<p>入口地址是<code>io.seata.server.Server#main()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> IOException </span>&#123;</span><br><span class="line">        <span class="comment">//1、 参数解析</span></span><br><span class="line">        ParameterParser parameterParser = <span class="keyword">new</span> ParameterParser(args);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//2、 监控初始化</span></span><br><span class="line">        MetricsManager.get().init();</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 3、将存储模式放到系统环境变量</span></span><br><span class="line">        System.setProperty(ConfigurationKeys.STORE_MODE, parameterParser.getStoreMode());</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 4、创建与RM TM通讯的rpc服务器</span></span><br><span class="line">        RpcServer rpcServer = <span class="keyword">new</span> RpcServer(WORKING_THREADS);</span><br><span class="line">        <span class="comment">//server port</span></span><br><span class="line">        rpcServer.setListenPort(parameterParser.getPort());</span><br><span class="line">        UUIDGenerator.init(parameterParser.getServerNode());</span><br><span class="line">        <span class="comment">//log store mode : file, db</span></span><br><span class="line">        <span class="comment">// 5、设置资源存储模式</span></span><br><span class="line">        SessionHolder.init(parameterParser.getStoreMode());</span><br><span class="line">        <span class="comment">// 6、核心事务协调器创建</span></span><br><span class="line">        DefaultCoordinator coordinator = <span class="keyword">new</span> DefaultCoordinator(rpcServer);</span><br><span class="line">        coordinator.init();</span><br><span class="line">        <span class="comment">// 7、把协调器作为一个回调 传给netty rpc模块</span></span><br><span class="line">        rpcServer.setHandler(coordinator);</span><br><span class="line">        <span class="comment">// 8、注册JVM关闭构造函数 </span></span><br><span class="line">        ShutdownHook.getInstance().addDisposable(coordinator);</span><br><span class="line">        ShutdownHook.getInstance().addDisposable(rpcServer);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//127.0.0.1 and 0.0.0.0 are not valid here.</span></span><br><span class="line">        <span class="keyword">if</span> (NetUtil.isValidIp(parameterParser.getHost(), <span class="keyword">false</span>)) &#123;</span><br><span class="line">            XID.setIpAddress(parameterParser.getHost());</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            XID.setIpAddress(NetUtil.getLocalIp());</span><br><span class="line">        &#125;</span><br><span class="line">        XID.setPort(rpcServer.getListenPort());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 9、启动RPC模块 监听TM RM的请求</span></span><br><span class="line">            rpcServer.init();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            LOGGER.error(<span class="string">"rpcServer init error:&#123;&#125;"</span>, e.getMessage(), e);</span><br><span class="line">            System.exit(-<span class="number">1</span>);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.exit(<span class="number">0</span>);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>首先看看参数解析,其实参数解析很简单主要是通过<code>JCommander</code>解析main函数中的args数组,不过在需要注意的是,由于Seata Server已经支持容器部署, 所以在容器环境启动参数的创建跟正常启动的参数是不同的。容器部署的启动参数需要通过<code>System.getenv</code>获取</p>
+<p><code>io.seata.server.ParameterParser#init()</code></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">// 判断启动环境是否是容器</span></span><br><span class="line">            <span class="keyword">boolean</span> inContainer = <span class="keyword">this</span>.isRunningInContainer();</span><br><span class="line"></span><br><span class="line">            <span class="comment">// 如果是容器启动 则从系统环境变量读取参数配置</span></span><br><span class="line">            <span class="keyword">if</span> (inContainer) &#123;</span><br><span class="line">                <span class="keyword">if</span> (LOGGER.isInfoEnabled()) &#123;</span><br><span class="line">                    LOGGER.info(<span class="string">"The server is running in container."</span>);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">this</span>.seataEnv = StringUtils.trimToNull(System.getenv(ENV_SYSTEM_KEY));</span><br><span class="line">                <span class="keyword">this</span>.host = StringUtils.trimToNull(System.getenv(ENV_SEATA_IP_KEY));</span><br><span class="line">                <span class="keyword">this</span>.serverNode = NumberUtils.toInt(System.getenv(ENV_SERVER_NODE_KEY), SERVER_DEFAULT_NODE);</span><br><span class="line">                <span class="keyword">this</span>.port = NumberUtils.toInt(System.getenv(ENV_SEATA_PORT_KEY), SERVER_DEFAULT_PORT);</span><br><span class="line">                <span class="keyword">this</span>.storeMode = StringUtils.trimToNull(System.getenv(ENV_STORE_MODE_KEY));</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                <span class="comment">// 否则使用JCommander 解析启动参数</span></span><br><span class="line">                JCommander jCommander = JCommander.newBuilder().addObject(<span class="keyword">this</span>).build();</span><br><span class="line">                jCommander.parse(args);</span><br><span class="line">                <span class="keyword">if</span> (help) &#123;</span><br><span class="line">                    jCommander.setProgramName(PROGRAM_NAME);</span><br><span class="line">                    jCommander.usage();</span><br><span class="line">                    System.exit(<span class="number">0</span>);</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (StringUtils.isNotBlank(seataEnv)) &#123;</span><br><span class="line">                System.setProperty(ENV_PROPERTY_KEY, seataEnv);</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">if</span> (StringUtils.isBlank(storeMode)) &#123;</span><br><span class="line">                storeMode = ConfigurationFactory.getInstance().getConfig(ConfigurationKeys.STORE_MODE,</span><br><span class="line">                    SERVER_DEFAULT_STORE_MODE);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">catch</span> (ParameterException e) &#123;</span><br><span class="line">            printError(e);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>拿到启动参数后我们就要根据启动参数依次 启动监控、设置存储模型，创建协调核心对象、启动Rpc服务器。</p>
+<p>为什么Rpc服务器要在最后一个启动呢？ 下篇文章会解答。</p>
+<p>由于监控对Seata的核心功能暂无影响所以本文已经后续文章暂不对监控进行分析。</p>
+<h2 id="总结"><a class="markdownIt-Anchor" href="#总结"></a> 总结</h2>
+<p>本文简单的介绍了一下<code>Seata Server</code>模块启动流程的一个分析，了解Seata的启动流程,但是都是比较简单没有深入，后续会陆续深入分析Rpc模块与核心协调模块。</p>
 
       
     </div>
@@ -608,7 +612,7 @@
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="http://www.yukonga.cn/2018/08/30/【java并发编程实战2】无锁编程CAS与atomic包/" title="【java并发编程实战2】无锁编程CAS与atomic包">http://www.yukonga.cn/2018/08/30/【java并发编程实战2】无锁编程CAS与atomic包/</a>
+    <a href="http://www.yukonga.cn/2020/04/02/Seata-Server-启动流程源码分析/" title="Seata-Server 启动流程源码分析">http://www.yukonga.cn/2020/04/02/Seata-Server-启动流程源码分析/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！</li>
@@ -634,11 +638,9 @@
           
             <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
           
-            <a href="/tags/多线程/" rel="tag"><i class="fa fa-tag"></i> 多线程</a>
+            <a href="/tags/分布式事务/" rel="tag"><i class="fa fa-tag"></i> 分布式事务</a>
           
-            <a href="/tags/CAS/" rel="tag"><i class="fa fa-tag"></i> CAS</a>
-          
-            <a href="/tags/atomic/" rel="tag"><i class="fa fa-tag"></i> atomic</a>
+            <a href="/tags/seata/" rel="tag"><i class="fa fa-tag"></i> seata</a>
           
         </div>
       
@@ -651,8 +653,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/08/29/【java并发编程实战1】何为线程安全性/" rel="next" title="【java并发编程实战1】何为线程安全性">
-                <i class="fa fa-chevron-left"></i> 【java并发编程实战1】何为线程安全性
+              <a href="/2020/03/31/认识Seata/" rel="next" title="认识Seata">
+                <i class="fa fa-chevron-left"></i> 认识Seata
               </a>
             
           </div>
@@ -660,10 +662,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/09/03/【java并发编程实战3】解密volatile/" rel="prev" title="【java并发编程实战3】解密volatile">
-                【java并发编程实战3】解密volatile <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -961,7 +959,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-无锁编程cas"><span class="nav-number">1.</span> <span class="nav-text"> 1、无锁编程CAS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#11-cas"><span class="nav-number">1.1.</span> <span class="nav-text"> 1.1、CAS</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#12-cpu指令对cas的支持"><span class="nav-number">1.2.</span> <span class="nav-text"> 1.2、CPU指令对CAS的支持</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-atomic族类"><span class="nav-number">2.</span> <span class="nav-text"> 2、 atomic族类</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#认识seata"><span class="nav-number">1.</span> <span class="nav-text"> 认识Seata</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#seata的txc模型"><span class="nav-number">1.1.</span> <span class="nav-text"> Seata的TXC模型</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server模块介绍"><span class="nav-number">2.</span> <span class="nav-text"> Server模块介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#server启动流程"><span class="nav-number">3.</span> <span class="nav-text"> Server启动流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text"> 总结</span></a></li></ol></div>
             
 
           </div>
