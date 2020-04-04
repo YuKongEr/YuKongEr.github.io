@@ -96,18 +96,18 @@
 
 
 
-  <meta name="description" content="从点 (x, y) 可以转换到 (x, x+y)  或者 (x+y, y)。 给定一个起点 (sx, sy) 和一个终点 (tx, ty)，如果通过一系列的转换可以从起点到达终点，则返回 True，否则返回 False。">
-<meta name="keywords" content="leetcode,java,算法">
+  <meta name="description" content="395. Longest Substring with At Least K Repeating Characters  原题链接 395. Longest Substring with At Least K Repeating Characters   解析思路 我们来思考一下什么样的情况可能可以构成连续的子串，每个字符都出现了至少k次；什么情况下又构不成？ 很显然如果字符串里有字符在整个串里">
+<meta name="keywords" content="leetcode,分治算法,java">
 <meta property="og:type" content="article">
-<meta property="og:title" content=" 780. 到达终点 (Reaching Points)">
-<meta property="og:url" content="http://www.yukonga.cn/2019/01/17/780-到达终点-Reaching-Points/index.html">
+<meta property="og:title" content="395. Longest Substring with At Least K Repeating Characters">
+<meta property="og:url" content="http://www.yukonga.cn/2020/04/04/395. Longest Substring with At Least K Repeating Characters/index.html">
 <meta property="og:site_name" content="yukong&#39;s blog">
-<meta property="og:description" content="从点 (x, y) 可以转换到 (x, x+y)  或者 (x+y, y)。 给定一个起点 (sx, sy) 和一个终点 (tx, ty)，如果通过一系列的转换可以从起点到达终点，则返回 True，否则返回 False。">
+<meta property="og:description" content="395. Longest Substring with At Least K Repeating Characters  原题链接 395. Longest Substring with At Least K Repeating Characters   解析思路 我们来思考一下什么样的情况可能可以构成连续的子串，每个字符都出现了至少k次；什么情况下又构不成？ 很显然如果字符串里有字符在整个串里">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-01-18T08:38:55.566Z">
+<meta property="og:updated_time" content="2020-04-04T16:01:35.218Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content=" 780. 到达终点 (Reaching Points)">
-<meta name="twitter:description" content="从点 (x, y) 可以转换到 (x, x+y)  或者 (x+y, y)。 给定一个起点 (sx, sy) 和一个终点 (tx, ty)，如果通过一系列的转换可以从起点到达终点，则返回 True，否则返回 False。">
+<meta name="twitter:title" content="395. Longest Substring with At Least K Repeating Characters">
+<meta name="twitter:description" content="395. Longest Substring with At Least K Repeating Characters  原题链接 395. Longest Substring with At Least K Repeating Characters   解析思路 我们来思考一下什么样的情况可能可以构成连续的子串，每个字符都出现了至少k次；什么情况下又构不成？ 很显然如果字符串里有字符在整个串里">
 
 
 
@@ -116,7 +116,7 @@
 
 
 
-  <link rel="canonical" href="http://www.yukonga.cn/2019/01/17/780-到达终点-Reaching-Points/">
+  <link rel="canonical" href="http://www.yukonga.cn/2020/04/04/395. Longest Substring with At Least K Repeating Characters/">
 
 
 
@@ -126,7 +126,7 @@
   };
 </script>
 
-  <title> 780. 到达终点 (Reaching Points) | yukong's blog</title>
+  <title>395. Longest Substring with At Least K Repeating Characters | yukong's blog</title>
   
 
 
@@ -356,7 +356,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://www.yukonga.cn/2019/01/17/780-到达终点-Reaching-Points/">
+    <link itemprop="mainEntityOfPage" href="http://www.yukonga.cn/2020/04/04/395. Longest Substring with At Least K Repeating Characters/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="yukong">
@@ -373,7 +373,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline"> 780. 到达终点 (Reaching Points)
+          <h1 class="post-title" itemprop="name headline">395. Longest Substring with At Least K Repeating Characters
 
               
             
@@ -399,7 +399,7 @@
                 
               
 
-              <time title="创建时间：2019-01-17 17:10:17" itemprop="dateCreated datePublished" datetime="2019-01-17T17:10:17+08:00">2019-01-17</time>
+              <time title="创建时间：2020-04-04 23:59:59" itemprop="dateCreated datePublished" datetime="2020-04-04T23:59:59+08:00">2020-04-04</time>
             
 
             
@@ -416,7 +416,7 @@
                 
                   <span class="post-meta-item-text">更新于</span>
                 
-                <time title="修改时间：2019-01-18 16:38:55" itemprop="dateModified" datetime="2019-01-18T16:38:55+08:00">2019-01-18</time>
+                <time title="修改时间：2020-04-05 00:01:35" itemprop="dateModified" datetime="2020-04-05T00:01:35+08:00">2020-04-05</time>
               
             
           </span>
@@ -452,8 +452,8 @@
                 </span>
             
                 <span class="post-meta-item-text">评论数：</span>
-                <a href="/2019/01/17/780-到达终点-Reaching-Points/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count valine-comment-count" data-xid="/2019/01/17/780-到达终点-Reaching-Points/" itemprop="commentCount"></span>
+                <a href="/2020/04/04/395. Longest Substring with At Least K Repeating Characters/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count valine-comment-count" data-xid="/2020/04/04/395. Longest Substring with At Least K Repeating Characters/" itemprop="commentCount"></span>
                 </a>
               </span>
             
@@ -461,7 +461,7 @@
 
           
           
-            <span id="/2019/01/17/780-到达终点-Reaching-Points/" class="leancloud_visitors" data-flag-title=" 780. 到达终点 (Reaching Points)">
+            <span id="/2020/04/04/395. Longest Substring with At Least K Repeating Characters/" class="leancloud_visitors" data-flag-title="395. Longest Substring with At Least K Repeating Characters">
               <span class="post-meta-divider">|</span>
               <span class="post-meta-item-icon">
                 <i class="fa fa-eye"></i>
@@ -492,24 +492,16 @@
       
 
       
-        <p>从点 <code>(x, y)</code> 可以<strong>转换</strong>到 <code>(x, x+y)</code>  或者 <code>(x+y, y)</code>。</p>
-<p>给定一个起点 <code>(sx, sy)</code> 和一个终点 <code>(tx, ty)</code>，如果通过一系列的<strong>转换</strong>可以从起点到达终点，则返回 <code>True</code>，否则返回 <code>False</code>。</p>
+        <h2 id="395-longest-substring-with-at-least-k-repeating-characters"><a class="markdownIt-Anchor" href="#395-longest-substring-with-at-least-k-repeating-characters"></a> <a href="https://leetcode-cn.com/problems/longest-substring-with-at-least-k-repeating-characters/" target="_blank" rel="noopener">395. Longest Substring with At Least K Repeating Characters</a></h2>
+<blockquote>
+<p>原题链接 <a href="https://leetcode-cn.com/problems/longest-substring-with-at-least-k-repeating-characters/" target="_blank" rel="noopener">395. Longest Substring with At Least K Repeating Characters</a></p>
+</blockquote>
+<h2 id="解析思路"><a class="markdownIt-Anchor" href="#解析思路"></a> 解析思路</h2>
+<p>我们来思考一下什么样的情况可能可以构成连续的子串，每个字符都出现了至少k次；什么情况下又构不成？<br>
+很显然如果字符串里有字符在整个串里都没出现k次，那么含有这个字符的子串一定是不可能成立的。所以我们可以通过这些小于k次的字符作为分隔符 把长字符串分成一个个子串, 采用分支算法求字符串中符合条件的长度 返回其中最长的。</p>
 <a id="more"></a>
-<figure class="highlight angelscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">示例:</span><br><span class="line">输入: sx = <span class="number">1</span>, sy = <span class="number">1</span>, tx = <span class="number">3</span>, ty = <span class="number">5</span></span><br><span class="line">输出: True</span><br><span class="line">解释:</span><br><span class="line">可以通过以下一系列转换从起点转换到终点：</span><br><span class="line">(<span class="number">1</span>, <span class="number">1</span>) -&gt; (<span class="number">1</span>, <span class="number">2</span>)</span><br><span class="line">(<span class="number">1</span>, <span class="number">2</span>) -&gt; (<span class="number">3</span>, <span class="number">2</span>)</span><br><span class="line">(<span class="number">3</span>, <span class="number">2</span>) -&gt; (<span class="number">3</span>, <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">输入: sx = <span class="number">1</span>, sy = <span class="number">1</span>, tx = <span class="number">2</span>, ty = <span class="number">2</span></span><br><span class="line">输出: False</span><br><span class="line"></span><br><span class="line">输入: sx = <span class="number">1</span>, sy = <span class="number">1</span>, tx = <span class="number">1</span>, ty = <span class="number">1</span></span><br><span class="line">输出: True</span><br></pre></td></tr></table></figure>
-<p><strong>注意:</strong></p>
-<ul>
-<li><code>sx, sy, tx, ty</code> 是范围在 <code>[1, 10^9]</code> 的整数。</li>
-</ul>
-<p>由于本题按照题目给的思路正向一步一步走下去会存在多种情况，我们可以逆向推导。反推起点，因为这样只存在两种种情况。</p>
-<ul>
-<li><code>if : tx &gt; ty then : tx = tx % ty</code></li>
-<li><code>if : ty &gt; tx then : ty = ty % tx</code></li>
-</ul>
-<p><code>java代码</code></p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">reachingPoints</span><span class="params">(<span class="keyword">int</span> sx, <span class="keyword">int</span> sy, <span class="keyword">int</span> tx, <span class="keyword">int</span> ty)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span>(tx &gt; sx &amp;&amp; ty &gt; sy) &#123;</span><br><span class="line">            <span class="keyword">if</span> (tx &gt; ty) &#123;</span><br><span class="line">                tx = tx % ty;</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                ty = ty % tx;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (tx == sx) &#123;</span><br><span class="line">           <span class="keyword">return</span>  (ty - sy)   % tx == <span class="number">0</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> <span class="keyword">if</span>(ty == sy) &#123;</span><br><span class="line">           <span class="keyword">return</span> (tx  - sx) % ty  == <span class="number">0</span>;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p><code>python代码</code></p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Solution</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">reachingPoints</span><span class="params">(self, sx, sy, tx, ty)</span>:</span></span><br><span class="line">        <span class="string">"""</span></span><br><span class="line"><span class="string">        :type sx: int</span></span><br><span class="line"><span class="string">        :type sy: int</span></span><br><span class="line"><span class="string">        :type tx: int</span></span><br><span class="line"><span class="string">        :type ty: int</span></span><br><span class="line"><span class="string">        :rtype: bool</span></span><br><span class="line"><span class="string">        """</span></span><br><span class="line">        <span class="keyword">while</span> tx &gt; sx <span class="keyword">and</span> ty &gt; sy:</span><br><span class="line">            <span class="keyword">if</span> tx &gt; ty:</span><br><span class="line">                tx = tx % ty</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                ty = ty % tx</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">if</span> tx == sx:</span><br><span class="line">             <span class="keyword">return</span> (ty - sy) % sx == <span class="number">0</span></span><br><span class="line">        <span class="keyword">if</span> ty == sy:</span><br><span class="line">             <span class="keyword">return</span> (tx - sx) % sy == <span class="number">0</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">False</span></span><br></pre></td></tr></table></figure>
-
+<h3 id="ac代码"><a class="markdownIt-Anchor" href="#ac代码"></a> AC代码</h3>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">longestSubstring</span><span class="params">(String s, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> longestSubstring(s, <span class="number">0</span>, s.length() - <span class="number">1</span>, k);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">longestSubstring</span><span class="params">(String s, <span class="keyword">int</span> begin, <span class="keyword">int</span> end, <span class="keyword">int</span> k)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (end - begin + <span class="number">1</span> &lt; k) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span>[] chs = <span class="keyword">new</span> <span class="keyword">int</span>[<span class="number">26</span>];</span><br><span class="line">        <span class="comment">// 计算出现次数</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = begin; i &lt;= end; i++) &#123;</span><br><span class="line">            chs[s.charAt(i) - <span class="string">'a'</span>] = chs[s.charAt(i) - <span class="string">'a'</span>] + <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 跳过 次数小于k的</span></span><br><span class="line">        <span class="keyword">while</span> (begin &lt; end &amp;&amp; chs[s.charAt(begin) - <span class="string">'a'</span>] &lt; k) &#123;</span><br><span class="line">            begin++;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (begin &lt; end &amp;&amp; chs[s.charAt(end) - <span class="string">'a'</span>] &lt; k) &#123;</span><br><span class="line">            end--;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (end - begin + <span class="number">1</span> &lt; k) &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">// 分而治之</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = begin; i &lt;= end; i++) &#123;</span><br><span class="line">            <span class="keyword">if</span> (chs[s.charAt(i) - <span class="string">'a'</span>] &lt; k) &#123;</span><br><span class="line">                <span class="keyword">return</span> Math.max(longestSubstring(s, begin, i - <span class="number">1</span>, k), longestSubstring(s, i + <span class="number">1</span>, end, k));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> end - begin + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
       
     </div>
 
@@ -576,7 +568,7 @@
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
     
-    <a href="http://www.yukonga.cn/2019/01/17/780-到达终点-Reaching-Points/" title=" 780. 到达终点 (Reaching Points)">http://www.yukonga.cn/2019/01/17/780-到达终点-Reaching-Points/</a>
+    <a href="http://www.yukonga.cn/2020/04/04/395. Longest Substring with At Least K Repeating Characters/" title="395. Longest Substring with At Least K Repeating Characters">http://www.yukonga.cn/2020/04/04/395. Longest Substring with At Least K Repeating Characters/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i>BY-NC</a> 许可协议。转载请注明出处！</li>
@@ -602,9 +594,9 @@
           
             <a href="/tags/leetcode/" rel="tag"><i class="fa fa-tag"></i> leetcode</a>
           
-            <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
+            <a href="/tags/分治算法/" rel="tag"><i class="fa fa-tag"></i> 分治算法</a>
           
-            <a href="/tags/算法/" rel="tag"><i class="fa fa-tag"></i> 算法</a>
+            <a href="/tags/java/" rel="tag"><i class="fa fa-tag"></i> java</a>
           
         </div>
       
@@ -617,8 +609,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/11/29/基于SpringCloud-Finchley-SR1-、SpringBoot-2-x、-vue、element-ui-微服务基础脚手架/" rel="next" title="基于SpringCloud Finchley.SR1 、SpringBoot 2.x、 vue、element-ui 微服务基础脚手架">
-                <i class="fa fa-chevron-left"></i> 基于SpringCloud Finchley.SR1 、SpringBoot 2.x、 vue、element-ui 微服务基础脚手架
+              <a href="/2020/04/02/Seata-Server-启动流程源码分析/" rel="next" title="Seata-Server 启动流程源码分析">
+                <i class="fa fa-chevron-left"></i> Seata-Server 启动流程源码分析
               </a>
             
           </div>
@@ -626,10 +618,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/01/18/56-合并区间-Merge-Intervals/" rel="prev" title="56. 合并区间(Merge Intervals)">
-                56. 合并区间(Merge Intervals) <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -677,8 +665,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <div class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <div class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
             
@@ -903,6 +900,23 @@
         </div>
       </div>
 
+      
+      <!--noindex-->
+        <div class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+            
+            
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#395-longest-substring-with-at-least-k-repeating-characters"><span class="nav-number">1.</span> <span class="nav-text"> 395. Longest Substring with At Least K Repeating Characters</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#解析思路"><span class="nav-number">2.</span> <span class="nav-text"> 解析思路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ac代码"><span class="nav-number">2.1.</span> <span class="nav-text"> AC代码</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </div>
+      <!--/noindex-->
       
 
       
