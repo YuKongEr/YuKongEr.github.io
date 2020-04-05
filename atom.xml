@@ -42,9 +42,9 @@
     
       <category term="leetcode" scheme="http://www.yukonga.cn/tags/leetcode/"/>
     
-      <category term="分治算法" scheme="http://www.yukonga.cn/tags/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/"/>
-    
       <category term="java" scheme="http://www.yukonga.cn/tags/java/"/>
+    
+      <category term="分治算法" scheme="http://www.yukonga.cn/tags/%E5%88%86%E6%B2%BB%E7%AE%97%E6%B3%95/"/>
     
   </entry>
   
@@ -102,11 +102,11 @@
     
       <category term="leetcode" scheme="http://www.yukonga.cn/tags/leetcode/"/>
     
-      <category term="java" scheme="http://www.yukonga.cn/tags/java/"/>
-    
       <category term="BST" scheme="http://www.yukonga.cn/tags/BST/"/>
     
       <category term="算法" scheme="http://www.yukonga.cn/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="java" scheme="http://www.yukonga.cn/tags/java/"/>
     
   </entry>
   
@@ -134,9 +134,9 @@
     
       <category term="leetcode" scheme="http://www.yukonga.cn/tags/leetcode/"/>
     
-      <category term="java" scheme="http://www.yukonga.cn/tags/java/"/>
-    
       <category term="算法" scheme="http://www.yukonga.cn/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="java" scheme="http://www.yukonga.cn/tags/java/"/>
     
       <category term="递归" scheme="http://www.yukonga.cn/tags/%E9%80%92%E5%BD%92/"/>
     
@@ -166,9 +166,9 @@
     
       <category term="leetcode" scheme="http://www.yukonga.cn/tags/leetcode/"/>
     
-      <category term="java" scheme="http://www.yukonga.cn/tags/java/"/>
-    
       <category term="算法" scheme="http://www.yukonga.cn/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="java" scheme="http://www.yukonga.cn/tags/java/"/>
     
   </entry>
   
@@ -245,9 +245,9 @@
     
       <category term="leetcode" scheme="http://www.yukonga.cn/tags/leetcode/"/>
     
-      <category term="java" scheme="http://www.yukonga.cn/tags/java/"/>
-    
       <category term="算法" scheme="http://www.yukonga.cn/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="java" scheme="http://www.yukonga.cn/tags/java/"/>
     
   </entry>
   
@@ -272,9 +272,9 @@
     
       <category term="leetcode" scheme="http://www.yukonga.cn/tags/leetcode/"/>
     
-      <category term="java" scheme="http://www.yukonga.cn/tags/java/"/>
-    
       <category term="算法" scheme="http://www.yukonga.cn/tags/%E7%AE%97%E6%B3%95/"/>
+    
+      <category term="java" scheme="http://www.yukonga.cn/tags/java/"/>
     
   </entry>
   
