@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>http://www.yukonga.cn/2020/07/26/k8s%E9%83%A8%E7%BD%B2kafka%E9%9B%86%E7%BE%A4/</loc>
+    <lastmod>2020-07-26T05:47:11.050Z</lastmod>
+  </url>  <url>
     <loc>http://www.yukonga.cn/2020/07/26/k8s%E9%83%A8%E7%BD%B2zookeeper%E9%9B%86%E7%BE%A4/</loc>
     <lastmod>2020-07-26T05:29:48.303Z</lastmod>
   </url>  <url>
